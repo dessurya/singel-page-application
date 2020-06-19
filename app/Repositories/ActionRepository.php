@@ -46,6 +46,7 @@ class ActionRepository implements ActionRepositoryInterface{
 	}
 
 	private function takeProfilling($data){
+		return $storeData = $this->convert_to_akv($data['input']['data']['storeData']);
 		$me = User::find(Auth::guard('user')->user()->id);
 
 		$head = new Transaction;
@@ -56,7 +57,6 @@ class ActionRepository implements ActionRepositoryInterface{
 		$head->user_id = $me->id;
 		$head->save();
 
-		$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
 		foreach ($storeData as $key => $value) {
 			if (strpos($key, 'question') !== false) {
 				$profilling = Profilling::find($value);
@@ -349,7 +349,7 @@ class ActionRepository implements ActionRepositoryInterface{
 		private function uarAdminForm($data){
 			$var = [];
 			$var['Admin'] = null;
-			$var['Role'] = Role::where([ 'status' => 1 ])->whereNotIn('id', [2])->get();
+			$var['Role'] = Role::where([ 'status' => 'Y' ])->whereNotIn('id', [2])->get();
 			$title = 'Add Admin';
 			$action = $data['input']['data']['action'];
 			$acckey = $data['input']['data']['acckey'];
@@ -772,7 +772,7 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 	// profillingAnswer
 
-	// profillingAnswer
+	// profillingCompetencies
 		private function profillingCompetenciesForm($data){
 			$var = null;
 			$title = 'Add';
@@ -836,7 +836,7 @@ class ActionRepository implements ActionRepositoryInterface{
 				"info" => "Success!"
 			];
 		}
-	// profillingAnswer
+	// profillingCompetencies
 
 	// profilling
 		private function profillingForm($data){
