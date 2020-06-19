@@ -30,7 +30,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = 'administrator/login';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -43,13 +43,10 @@ class LoginController extends Controller
     }
 
     public function guard(){
-        return Auth::guard('user');
+        return Auth::guard();
     }
 
     public function view(){
-        if (Auth::guard('user')->user()) {
-            dd('asd');
-        }
         return view('login');
     }
 

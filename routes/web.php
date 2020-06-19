@@ -10,7 +10,11 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('/clear-cache', function() {
+    $exitCode = Artisan::call('config:cache');
+    return 'DONE'; //Return anything
+});
+Route::get('/', 'Auth\LoginController@view');
 Route::get('/login', 'Auth\LoginController@view')->name('auth.login.view');
 
 Route::get('/signup', 'Auth\RegisterController@view')->name('auth.signup.view');

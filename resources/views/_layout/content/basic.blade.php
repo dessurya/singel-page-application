@@ -14,7 +14,7 @@
 		<div style="position: relative; width: 100%; height: 120px; display: table;">
 			<div style="position: relative; display: table-row; width: 100%; height: 120px;">
 				<div style="position: relative; display: table-cell; width: 10%; height: 120px; vertical-align: middle; text-align: center;">
-					<img src="{{ asset('images/loading_1.gif') }}" height="80px;">
+					<img src="{{ asset('images/avatar.png') }}" height="80px;">
 				</div>
 				<div style="position: relative; display: table-cell; width: 80%; height: 120px; vertical-align: middle; text-align: center;">
 					Welcome {{ Str::title(Auth::guard('user')->user()->name) }}<br>
