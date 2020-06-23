@@ -21,13 +21,17 @@ Route::post('/login/action', 'Auth\LoginController@login')->name('auth.login');
 Route::get('/login/action/token', 'Auth\LoginController@newUserLogin')->name('auth.login.token');
 
 
+
 Route::middleware('user')->group(function(){
 
-	Route::get('/clear-cache', function() {
+	Route::get('/clear_cache', function() {
 		if (Auth::guard('user')->user()->roll_id == 1) {
 		    Artisan::call('config:cache');
-		    Artisan::call('route:cache');
-		    return 'Success, celar cache config and route';
+		    Artisan::call('route:clear');
+		    Artisan::call('view:clear');
+		    Artisan::call('cache:clear');
+			// Artisan::call('update');
+		    return 'Success, celar config,route,view,cache config and route';
 		}else{
 			return 'You not have access';
 		}
