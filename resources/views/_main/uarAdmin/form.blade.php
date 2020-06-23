@@ -10,7 +10,7 @@
 				<input type="hidden" name="action" value="{{ $action }}">
 				<input type="hidden" name="store" value="true">
 				<input type="hidden" name="id" value="{{ !empty($var['Admin']) ? $var['Admin']['id'] : ''  }}">
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					<div class="form-group">
 						Email <span class="email error"></span>
 						<input 
@@ -25,7 +25,7 @@
 							class="form-control">
 					</div>
 				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					<div class="form-group">
 						Name <span class="name error"></span>
 						<input 
@@ -40,18 +40,7 @@
 							class="form-control">
 					</div>
 				</div>
-				<div class="col-sm-6">
-					<div class="form-group">
-						Password <span class="password error"></span>
-						<input 
-							@if(in_array($action,['add'])) required @endif
-							name="password" 
-							type="password" 
-							value="" 
-							class="form-control">
-					</div>
-				</div>
-				<div class="col-sm-6">
+				<div class="col-sm-12">
 					<div class="form-group">
 						Role <span class="role error"></span>
 						<select 

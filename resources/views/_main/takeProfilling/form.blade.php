@@ -12,11 +12,11 @@
 				<div id="question"></div>
 			</div>
 			<div id="page" style="float: left; padding-top: 10px;">
-				<label>Page <strong></strong> of {{ $countPage }}</label>
+				<label>Page <strong></strong> of {{ $countPage }} || {{ $countQuestion }} Question</label>
 			</div>
 			<div style="float: right;">
-				<span id="questionPrevPage" class="btn btn-default"  style="display: none;">Prev</span>
-				<span id="questionNextPage" class="btn btn-default">Next</span>
+				<button id="questionPrevPage" class="btn btn-default"  style="display: none;">Prev</button>
+				<button id="questionNextPage" class="btn btn-default">Next</button>
 				<button class="btn btn-success" style="display: none;" type="submit">Save</button>
 			</div>
 			<div class="clearfix"></div>

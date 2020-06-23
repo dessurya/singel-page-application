@@ -5,7 +5,9 @@ namespace App\Repositories;
 use Auth;
 use Hash;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
+use PhpOffice\PhpSpreadsheet\IOFactory; 
 use App\Repositories\Interfaces\ActionRepositoryInterface;
 
 use App\Model\Config;
@@ -46,7 +48,7 @@ class ActionRepository implements ActionRepositoryInterface{
 	}
 
 	private function takeProfilling($data){
-		return $storeData = $this->convert_to_akv($data['input']['data']['storeData']);
+		$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
 		$me = User::find(Auth::guard('user')->user()->id);
 
 		$head = new Transaction;
@@ -58,7 +60,7 @@ class ActionRepository implements ActionRepositoryInterface{
 		$head->save();
 
 		foreach ($storeData as $key => $value) {
-			if (strpos($key, 'question') !== false) {
+			if (strpos($key, 'question') !== false and !strpos($key, 'HiddenCheck')) {
 				$profilling = Profilling::find($value);
 				$detils = new TransactionDetils;
 				$detils->transaction = $head->id;
@@ -136,6 +138,9 @@ class ActionRepository implements ActionRepositoryInterface{
 
 	private function change_password_store($data){
 		$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
+		if (!isset($storeData['old_password'])) {
+			$storeData['old_password'] = null;
+		}
 		$me = User::find(Auth::guard('user')->user()->id);
 
     	if(empty($me->password) or Hash::check($storeData['old_password'], $me->password)){
@@ -145,7 +150,7 @@ class ActionRepository implements ActionRepositoryInterface{
 				return [
 					"Success" => true,
 					"reloadTable" => false,
-					"responseType" => "storeFormData",
+					"responseType" => "refresh",
 					"info" => "Success!"
 				];
 			}else{
@@ -221,12 +226,21 @@ class ActionRepository implements ActionRepositoryInterface{
 				return 'profillingActivatedInactivated';
 			}else if (in_array($key, ['selfUpdate_edit_store'])) {
 				return 'uarUserStore';
+			}else if (in_array($key, ['transaction_view', 'selfProfillingHistory_view'])) {
+				return 'transactionView';
+			}else if (in_array($key, ['transaction_revision/finalise_store'])) {
+				return 'transactionStore';
+			}else if (in_array($key, ['profilling_upload'])) {
+				return 'profillingUpload';
+			}else if (in_array($key, ['uarUser_upload'])) {
+				return 'uarUserUpload';
 			}
 		}
 
-		private function callForm($data){
+		private function callForm($data, $reloadTable = false){
 			return [
 				"responseType" => "callForm",
+				"reloadTable" => $reloadTable,
 				"callForm" => base64_encode($data)
 			];
 		}
@@ -245,6 +259,31 @@ class ActionRepository implements ActionRepositoryInterface{
 				$arr[$val['name']] = $val['value'];
 			}
 			return $arr;
+		}
+
+		private function readExcelFile($data){
+			$file         = explode('/', $data['path']);
+	        $file         = Carbon::now()->format('Ymd_h_i_s').$file[count($file)-1];
+	        $file_dir     = 'import_doc/'.$file.'.xlsx';
+			$data['decoded_file'] = base64_decode($data['decoded_file']); // decode the file
+	        try {
+	          file_put_contents($file_dir, $data['decoded_file']);
+	          $response = true;
+	        } catch (Exception $e) {
+	          $response = $e->getMessage();
+	        }
+	        $objPHPExcel = IOFactory::load($file_dir);
+	        $sheet = $objPHPExcel->getSheet(0);
+	        $highestRow = $sheet->getHighestRow();
+	        $highestColumn = $sheet->getHighestColumn();
+	        $highestColumn++;
+	        $header = [];
+	        for ($column = 'A'; $column != $highestColumn; $column++) {
+	        	$cell = $sheet->getCell($column.'1')->getValue();
+	        	$header[] = $cell;
+	        }
+	        return ['sheet' => $sheet, 'highestRow' => $highestRow, 'header' => $header, 'file_dir' => $file_dir];
+
 		}
 	// public
 
@@ -343,6 +382,114 @@ class ActionRepository implements ActionRepositoryInterface{
 				"info" => "Success!"
 			];
 		}
+
+		private function uarUserUpload($data){
+			$checkHeader = Config::where('accKey', 'uarUser')->first();
+			$checkHeader = json_decode($checkHeader->config, true);
+			$checkHeader = $checkHeader['templateCheck'];
+			$read = $this->readExcelFile([
+	        	'path' => $data['input']['data']['acckey'],
+	        	'decoded_file' => $data['input']['data']['base64'] 
+	        ]);
+	        if ($read['header'] !== $checkHeader) {
+	        	unlink($read['file_dir']);
+	        	return [
+	        		"Success" => false,
+	        		"responseType" => "notif",
+	        		"info" => "Sorry, this not correct document"
+	        	];
+	        }
+	        $result = [];
+	        $result['true'] = [];
+	        $result['false'] = [];
+	        for ($row = 2; $row <= $read['highestRow']; $row++){
+	        	$sheet = $read['sheet'];
+	        	$data = [
+	        		"name" => $sheet->getCell('A'.$row)->getValue(),
+	        		"email" => $sheet->getCell('B'.$row)->getValue(),
+	        		"date_of_birth" => $sheet->getCell('C'.$row)->getValue(),
+	        		"phone" => $sheet->getCell('D'.$row)->getValue(),
+	        		"gender" => $sheet->getCell('E'.$row)->getValue(),
+	        		"religion" => $sheet->getCell('F'.$row)->getValue(),
+	        		"marital_status" => $sheet->getCell('G'.$row)->getValue(),
+	        		"education" => $sheet->getCell('H'.$row)->getValue(),
+	        		"project_code" => $sheet->getCell('I'.$row)->getValue(),
+	        		"project_name" => $sheet->getCell('J'.$row)->getValue(),
+	        		"group_cos" => $sheet->getCell('K'.$row)->getValue(),
+	        		"current_companies" => $sheet->getCell('L'.$row)->getValue(),
+	        		"industry" => $sheet->getCell('M'.$row)->getValue(),
+	        		"work_title" => $sheet->getCell('N'.$row)->getValue(),
+	        		"level" => $sheet->getCell('O'.$row)->getValue(),
+	        		"competencies" => $sheet->getCell('P'.$row)->getValue(),
+	        		"status" => $sheet->getCell('Q'.$row)->getValue()
+	        	];
+	        	$store = $this->uarUserUploadStore($data);
+	        	if ($store['Success'] == true) { $result['true'][] = $data; }
+	        	else if ($store['Success'] == false) { 
+	        		$data['info'] = $store['info'];
+	        		$result['false'][] = $data;
+	        	}
+	        }
+	        unlink($read['file_dir']);
+	        $html = view('_main.uarUser.import', compact('result'))->render();
+			return $this->callForm($html, true);
+		}
+
+		private function uarUserUploadStore($data){
+			if (!in_array($data['gender'], ['Male','Female'])) {
+				return ['Success' => false, 'info' => 'Gender not in Male or Female'];
+			}else if (User::where('email',$data['email'])->count() >= 1) {
+				return ['Success' => false, 'info' => 'Email alerdy exists'];
+			}
+			$remember_token = Str::random(32);
+			$store = new User;
+			$store->remember_token = $remember_token;
+			$store->name = $data['name'];
+			$store->email = $data['email'];
+			$store->status = $data['status'];
+			$store->roll_id = 2;
+			$store->save();
+			$store2 = UserDetils::where('user_id',$store->id)->first();
+			$store2 = new UserDetils;
+			$store2->user_id = $store->id;
+			$store2->date_of_birth = $data['date_of_birth'];
+			$store2->phone = $data['phone'];
+			$store2->gender = $data['gender'];
+			$store2->religion = $data['religion'];
+			$store2->marital_status = $data['marital_status'];
+			$store2->education = $data['education'];
+			$store2->project_name = $data['project_name'];
+			$store2->project_code = $data['project_code'];
+			$store2->group_cos = $data['group_cos'];
+			$store2->current_companies = $data['current_companies'];
+			$store2->industry = $data['industry'];
+			$store2->work_title = $data['work_title'];
+			$store2->level = $data['level'];
+			$store2->competencies = $data['competencies'];
+			$store2->save();
+			$this->uarUserUploadStoreCheckMaster([ 'type' => 'competencies', 'value' => $data['competencies'] ]);
+			$this->uarUserUploadStoreCheckMaster([ 'type' => 'education', 'value' => $data['education'] ]);
+			$this->uarUserUploadStoreCheckMaster([ 'type' => 'industry', 'value' => $data['industry'] ]);
+			$this->uarUserUploadStoreCheckMaster([ 'type' => 'level', 'value' => $data['level'] ]);
+			$this->uarUserUploadStoreCheckMaster([ 'type' => 'marital', 'value' => $data['marital_status'] ]);
+			$this->uarUserUploadStoreCheckMaster([ 'type' => 'religion', 'value' => $data['religion'] ]);
+			return ['Success' => true];
+		}
+
+		private function uarUserUploadStoreCheckMaster($data){
+			$condtion = [
+				'type' => $data['type'],
+				'value' => preg_replace("/[^A-Za-z0-9 ]/", '', $data['value'])
+			];
+			$check = Master::where($condtion)->count();
+			if ($check == 0) { 
+				$store = new Master;
+				$store->type = $data['type'];
+				$store->value = $data['value'];
+				$store->status = 'Y';
+				$store->save();
+			}
+		}
 	// uarUser
 
 	// uarAdmin
@@ -382,8 +529,10 @@ class ActionRepository implements ActionRepositoryInterface{
 				];
 			}
 			if (empty($storeData['id'])) {
+				$remember_token = Str::random(32);
 				$store = new User;
 				$store->status = 'N';
+				$store->remember_token = $remember_token;
 			}else{
 				$store = User::find($storeData['id']);
 			}
@@ -391,9 +540,6 @@ class ActionRepository implements ActionRepositoryInterface{
 			$store->name = $storeData['name'];
 			$store->email = $storeData['email'];
 			$store->roll_id = $storeData['role'];
-			if (!empty($storeData['password'])) {
-				$store->password = Hash::make($storeData['password']);
-			}
 			$store->save();
 			return [
 				"Success" => true,
@@ -421,7 +567,6 @@ class ActionRepository implements ActionRepositoryInterface{
 			];
 		}
 	// uarAdmin
-
 
 	// uarRole
 		private function uarRoleForm($data){
@@ -906,5 +1051,132 @@ class ActionRepository implements ActionRepositoryInterface{
 				"info" => "Success!"
 			];
 		}
+
+		private function profillingUpload($data){
+			$checkHeader = Config::where('accKey', 'profilling')->first();
+			$checkHeader = json_decode($checkHeader->config, true);
+			$checkHeader = $checkHeader['templateCheck'];
+			$read = $this->readExcelFile([
+	        	'path' => $data['input']['data']['acckey'],
+	        	'decoded_file' => $data['input']['data']['base64'] 
+	        ]);
+	        if ($read['header'] !== $checkHeader) {
+	        	unlink($read['file_dir']);
+	        	return [
+	        		"Success" => false,
+	        		"responseType" => "notif",
+	        		"info" => "Sorry, this not correct document"
+	        	];
+	        }
+	        $result = [];
+	        $result['true'] = [];
+	        $result['false'] = [];
+	        for ($row = 2; $row <= $read['highestRow']; $row++){
+	        	$sheet = $read['sheet'];
+	        	$data = [
+	        		"criteria" => $sheet->getCell('A'.$row)->getValue(),
+	        		"question" => $sheet->getCell('B'.$row)->getValue(),
+	        		"answer" => $sheet->getCell('C'.$row)->getValue(),
+	        		"competencies" => $sheet->getCell('D'.$row)->getValue(),
+	        		"status" => $sheet->getCell('E'.$row)->getValue()
+	        	];
+	        	$store = $this->profillingUploadStore($data);
+	        	if ($store == true) { $result['true'][] = $data; }
+	        	else if ($store == false) { $result['false'][] = $data; }
+	        }
+	        unlink($read['file_dir']);
+	        $html = view('_main.profilling.import', compact('result'))->render();
+			return $this->callForm($html, true);
+		}
+
+		private function profillingUploadStore($data){
+			$GetQuestion = $this->profillingUploadStoreGetComponen([
+				'model' => 'App\Model\Question',
+				'store' => ['criteria' => $data['criteria'], 'question' => $data['question']]
+			]);
+			$GetAnswer = $this->profillingUploadStoreGetComponen([
+				'model' => 'App\Model\Answer',
+				'store' => ['answer' => $data['answer']]
+			]);
+			$GetCompetencies = $this->profillingUploadStoreGetComponen([
+				'model' => 'App\Model\Competencies',
+				'store' => ['competencies' => $data['competencies']]
+			]);
+			$storeData = [
+				'competencies' => $GetCompetencies,
+				'answer' => $GetAnswer,
+				'question' => $GetQuestion
+			];
+			$cekOld = Profilling::where($storeData)->first();
+			if (!empty($cekOld)) {
+				return false;
+			}else{
+				$storeData['status'] = $data['status'];
+				Profilling::insert($storeData);
+				return true;
+			}
+		}
+
+		private function profillingUploadStoreGetComponen($data){
+			$ModelD = $data['model'];
+			$cekOld = $ModelD::where($data['store'])->first();
+			if (!empty($cekOld)) { return $cekOld->id; }
+			else { 
+				$data['store']['status'] = 'Y';
+				return $store = $ModelD::insertGetId($data['store']); 
+			}
+		}
 	// profilling
+
+	// transaction
+		private function transactionView($data){
+			$var = [];
+			$var['head'] = Transaction::find($data['input']['id']);
+			$var['competencies'] = json_decode($var['head']->result, true);
+			$var['competencies'] = $var['competencies']['competencies'];
+			$var['detl'] = TransactionDetils::where('transaction',$data['input']['id'])->get();
+			$type = $data['input']['data']['acckey'];
+			$action = $data['input']['data']['action'];
+			$acckey = $data['input']['data']['acckey'];
+			$access = json_decode(base64_decode($data['input']['data']['access']),true);
+			if (Auth::guard('user')->user()->roll_id != 2 and array_key_exists($data['input']['data']['acckey'],$access) and $access[$data['input']['data']['acckey']]['revision/finalise'] == true and $var['head']->status == 'Pending'){
+				$action = 'revision/finalise';
+			}
+			$title = 'View '.$type;
+
+			$html = view('_main.transaction.form', compact('var','acckey', 'action', 'title'))->render();
+			return $this->callForm($html);
+		}
+
+		private function transactionStore($data){
+			$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
+			if ($storeData['rf'] == 'revision' and empty($storeData['note'])) {
+				return [
+					"Success" => false,
+					"reloadForm" => false,
+					"reloadTable" => false,
+					"responseType" => "storeFormData",
+					"info" => "Harap isi note terlebih dahulu!"
+				];
+			}
+			$store = Transaction::find($storeData['id']);
+			if ($store->status != 'Pending') {
+				return [
+					"Success" => false,
+					"reloadForm" => false,
+					"reloadTable" => false,
+					"responseType" => "storeFormData",
+					"info" => "Tidak bisa merubah data yang telah disimpan!"
+				];
+			}
+			$store->status = Str::title($storeData['rf']);
+			$store->note = $storeData['note'];
+			$store->save();
+			return [
+				"Success" => true,
+				"responseType" => "storeFormData",
+				"info" => "Success!"
+			];
+		}
+	// transaction
 }

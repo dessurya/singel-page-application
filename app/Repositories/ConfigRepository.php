@@ -17,14 +17,20 @@ use DataTables;
 class ConfigRepository implements ConfigRepositoryInterface{
 
 	public function menu($roll){
-		$role = Role::find($roll);
-		$accs = json_decode($role->access_menu, true);
-		$menu = $accs['menu'];
-		return [
+		$result = [
 			"responseType" => "setMenuOnSeasion",
-			"accKey" => base64_encode(json_encode($accs['accKey'])),
-			"menuOnSeasion" => base64_encode(view('_layout.content.menu', compact('menu'))->render())
+			"accKey" => null,
+			"menuOnSeasion" => null
 		];
+		$account = User::find(Auth::guard('user')->user()->id);
+    	if (!empty($account->password)) {
+			$role = Role::find($roll);
+			$accs = json_decode($role->access_menu, true);
+			$menu = $accs['menu'];
+			$result['accKey'] = base64_encode(json_encode($accs['accKey']));
+			$result['menuOnSeasion'] = base64_encode(view('_layout.content.menu', compact('menu'))->render());
+    	}
+		return $result;
 	}
 
 	public function index($request){
@@ -69,7 +75,12 @@ class ConfigRepository implements ConfigRepositoryInterface{
     }
 
     public function change_password(){
-    	$html = view('change_password')->render();
+    	$type = 'new';
+    	$account = User::find(Auth::guard('user')->user()->id);
+    	if (!empty($account->password)) {
+    		$type = 'old';
+    	}
+    	$html = view('change_password', compact('type'))->render();
     	return [
     		"responseType" => "change_password",
     		"callForm" => base64_encode($html)
@@ -100,15 +111,19 @@ class ConfigRepository implements ConfigRepositoryInterface{
     	$question = Question::where('status', 'Y')->orderBy('sort', 'asc')->orderBy('criteria', 'asc')->orderBy('question', 'asc')->get();
     	$questionRender = [];
     	$build = null;
+    	$countQuestion = count($question);
     	foreach ($question as $key => $val) {
     		$build .= view('_main.takeProfilling.question', compact('key', 'val'))->render();
     		if (($key+1)%4 == 0) {
     			$questionRender[] = base64_encode($build);
     			$build = null;
+    		}else if (($key+1) == $countQuestion) {
+    			$questionRender[] = base64_encode($build);
+    			$build = null;
     		}
     	}
     	$countPage = ceil(count($question)/4);
-    	$html = view('_main.takeProfilling.form', compact('countPage'))->render();
+    	$html = view('_main.takeProfilling.form', compact('countPage','countQuestion'))->render();
     	return [
     		"responseType" => "takeProfilling",
     		"question" => $questionRender,

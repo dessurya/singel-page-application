@@ -1,6 +1,9 @@
 $( document ).ready(function() {
 	$('#loading-page').hide();
 	postData(null,urlMenu);
+	var data = {};
+	data['select'] = 'change_password';
+	postData(data,urlIndex);
 });
 
 $(document).on('click', 'button#logout', function() {
@@ -38,7 +41,19 @@ $(document).on('click', '#actionToolsGroupWrapper button', function(){
 	data['select'] = $(this).data('select');
 	data['acckey'] = $(this).data('key');
 	data['conf'] = $(this).data('conf');
+	data['template'] = $(this).data('template');
 	actionToolsExcute(data);
+});
+
+$(document).on('change', 'input.import', function(e){
+	var file = e.target.files[0];
+	var reader = new FileReader();
+	reader.readAsDataURL(file);
+	reader.onloadend = function () {
+		var b64 = reader.result.replace(/^data:.+;base64,/, '');
+	    sessionStorage.setItem('importBase64', b64);
+	    importExcute();
+	};
 });
 
 $(document).on('submit', 'form#storeData', function(){
@@ -107,10 +122,10 @@ $(document).on('click', '#modal-indexOfSearch .modal-footer button', function(){
 	postData(val,urlAction);
 });
 
-$(document).on('click', 'form#storeData .x_content span#questionNextPage', function(){
+$(document).on('click', 'form#storeData .x_content button#questionNextPage', function(){
 	var pageMax = sessionStorage.getItem("questionPageCount");
 	var page = sessionStorage.getItem("questionPage");
-	var checkRadio = questionHiddenCheck('#pageOfQuestion'+page);
+	var checkRadio = questionHiddenCheck(page);
 	if (checkRadio > 0) { return false; }
 	if(page == pageMax){
 		var pndata = {};
@@ -123,19 +138,15 @@ $(document).on('click', 'form#storeData .x_content span#questionNextPage', funct
 	page = parseInt(page)+1;
 	sessionStorage.setItem("questionPage", page);
 	pageOfQuestionShow(page);
+	$('form#storeData .x_content button#questionPrevPage').show();
 	if(page == pageMax){
 		$('form#storeData .x_content button').show();
-		$('form#storeData .x_content span#questionPrevPage').show();
-		$('form#storeData .x_content span#questionNextPage').hide();
-	}
-	if(page != pageMax){
-		$('form#storeData .x_content button').hide();
-		$('form#storeData .x_content span#questionPrevPage').hide();
+		$('form#storeData .x_content button#questionNextPage').hide();
 	}
 	return false;
 });
 
-$(document).on('click', 'form#storeData .x_content span#questionPrevPage', function(){
+$(document).on('click', 'form#storeData .x_content button#questionPrevPage', function(){
 	var pageMax = sessionStorage.getItem("questionPageCount");
 	var page = sessionStorage.getItem("questionPage");
 	if(page == 0){
@@ -147,14 +158,13 @@ $(document).on('click', 'form#storeData .x_content span#questionPrevPage', funct
 		return false;
 	}
 	page = parseInt(page)-1;
-	sessionStorage.setItem("questionPage", page)
+	sessionStorage.setItem("questionPage", page);
 	pageOfQuestionShow(page);
+	$('form#storeData .x_content button').hide();
+	$('form#storeData .x_content button#questionNextPage').show();
+	$('form#storeData .x_content button#questionPrevPage').show();
 	if(page == 0){
-		$('form#storeData .x_content span#questionNextPage').show();
-		$('form#storeData .x_content span#questionPrevPage').hide();
-	}
-	if(page != pageMax){
-		$('form#storeData .x_content button').hide();
+		$('form#storeData .x_content button#questionPrevPage').hide();
 	}
 	return false;
 });

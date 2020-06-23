@@ -22,7 +22,8 @@ class CreateVTransaction extends Migration
                     phone,
                     consultant,
                     competencies,
-                    status
+                    status,
+                    created_at AS created
                 FROM prof_transaction
             )
         ");

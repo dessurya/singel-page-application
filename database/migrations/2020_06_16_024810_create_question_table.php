@@ -17,7 +17,7 @@ class CreateQuestionTable extends Migration
             $table->bigIncrements('id');
             $table->string('criteria');
             $table->text('question');
-            $table->integer('sort')->default(0);
+            $table->integer('sort')->default(1);
             $table->string('status')->default('N');
             $table->timestamps();
         });

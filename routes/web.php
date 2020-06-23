@@ -10,10 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/clear-cache', function() {
-    $exitCode = Artisan::call('config:cache');
-    return 'DONE'; //Return anything
-});
+
 Route::get('/', 'Auth\LoginController@view');
 Route::get('/login', 'Auth\LoginController@view')->name('auth.login.view');
 
@@ -25,6 +22,16 @@ Route::get('/login/action/token', 'Auth\LoginController@newUserLogin')->name('au
 
 
 Route::middleware('user')->group(function(){
+
+	Route::get('/clear-cache', function() {
+		if (Auth::guard('user')->user()->roll_id == 1) {
+		    Artisan::call('config:cache');
+		    Artisan::call('route:cache');
+		    return 'Success, celar cache config and route';
+		}else{
+			return 'You not have access';
+		}
+	});
 
 	Route::get('/welcome', 'DashboardController@index')->name('dashboard');
 	Route::post('/logout/action', 'Auth\LoginController@logout')->name('auth.logout');

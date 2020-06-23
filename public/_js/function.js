@@ -32,13 +32,19 @@ function indexOfSearchResponse(data) {
 }
 
 function setMenuOnSeasion(data) {
-	sessionStorage.setItem("accKey", JSON.stringify(data.accKey));
-	$("#menu").html(atob(data.menuOnSeasion));
+	if (data.accKey !== null && data.menuOnSeasion !== null) {
+		sessionStorage.setItem("accKey", JSON.stringify(data.accKey));
+		$("#menu").html(atob(data.menuOnSeasion));
+		$("#menu ul#myTab li:first").addClass('active');
+		$("#menu #myTabContent .tab-pane:first").addClass('active');
+		$("#menu #myTabContent .tab-pane:first").addClass('in');
+	}
 	return true;
 }
 
 function callForm(data) {
 	$("#form").html(atob(data.callForm));
+	if (data.reloadTable === true) { reloadDataTabless(); }
 	return true;
 }
 
@@ -48,11 +54,12 @@ function takeProfilling(data) {
 	$.each(data.question, function(i, item) {
 		var renderHTML = '<div id="pageOfQuestion'+i+'" class="pageOfQuestion">'+atob(item)+'</div>';
 		$("form#storeData .x_content #question").append(renderHTML);
-		sessionStorage.setItem("questionPageCount", i);
+		sessionStorage.setItem("questionPageCount", parseInt(i));
 	});
 
 	sessionStorage.setItem("questionPage", 0);
 	pageOfQuestionShow(0);
+	$("#contentAccess").html('');
 	return true;
 }
 
@@ -231,6 +238,13 @@ function reloadDataTabless() {
 }
 
 function actionToolsExcute(data) {
+	if(data.action == 'template'){ window.open(data.template, '_blank'); return false; }
+	else if(data.action == 'upload'){ 
+		sessionStorage.setItem('importBase64', null);
+		sessionStorage.setItem('importConfig', JSON.stringify(data)); 
+		$('input[type=file]').focus().trigger('click'); 
+		return false; 
+	}
 	var id = getDataId(data.select, false);
 	if(id == false){ return false; }
 	var val = {};
@@ -252,8 +266,22 @@ function actionToolsExcute(data) {
 		val['input']['data'] = data;
 		postData(val,urlAction);
 	}
-	// if(action == 'form'){ $('.content-wrapper section.content .nav-tabs a[href="#Open"]').tab('show'); }
 	// return false;
+}
+
+function importExcute() {
+	var data = JSON.parse(sessionStorage.getItem('importConfig'));
+	data['base64'] = sessionStorage.getItem('importBase64');
+	var val = {};
+	val['title'] = 'Warning';
+	val['type'] = 'info';
+	val['text'] = 'Are You Sure Do Import Data?';
+	val['input'] = {};
+	val['input']['url'] = urlAction;
+	val['input']['data'] = {};
+	val['input']['data'] = data;
+	pnotifyConfirm(val);
+	$('input.import').val(null);
 }
 
 function getDataId(select, target){
@@ -324,7 +352,10 @@ function pnotifyConfirm(data) {
 function questionHiddenCheck(elem) {
 	var count = 0;
 	var elemEach = 'form#storeData .x_content .questionHiddenCheck';
-	if(elem != null){ elemEach = 'form#storeData .x_content '+elem+' .questionHiddenCheck'; }
+	if(elem != null){ 
+		elem = parseInt(elem);
+		elemEach = 'form#storeData .x_content #pageOfQuestion'+elem+' .questionHiddenCheck'; 
+	}
 	$(elemEach).each(function(){
 		var checked = false;
 		var inputName = $(this).val();

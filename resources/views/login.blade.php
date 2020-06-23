@@ -54,7 +54,7 @@
               <div>
                 <input 
                   name="email" 
-                  type="text" 
+                  type="email" 
                   class="form-control" 
                   placeholder="Email" 
                   value="{{ isset($request->mail) ? $request->mail : '' }}"
@@ -62,11 +62,13 @@
                 />
               </div>
               <div>
-                <input name="password" type="password" class="form-control" placeholder="Password" required />
+                <input name="password" type="password" class="form-control" placeholder="Password"/>
               </div>
               <div>
                 <button class="btn btn-primary submit" type="submit">Log in</button>
                 <button class="btn btn-default" type="reset" onclick="location.href = '{{ route('auth.signup.view') }}';">Sign Up</button>
+                <input type="hidden" name="reset" value="false">
+                <button id="reset_password" class="btn btn-info" type="submit">Reset Password</button>
               </div>
 
               <div class="clearfix"></div>
@@ -75,6 +77,11 @@
         </div>
       </div>
     </div>
-
+  <script type="text/javascript" src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
+  <script type="text/javascript">
+    $(document).on('click', 'button#reset_password', function() {
+      $('input[name=reset]').val('true');
+    });
+  </script>
   </body>
 </html>
