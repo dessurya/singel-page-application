@@ -63,6 +63,7 @@ class LoginController extends Controller
             $user = User::where('email',$request->email)->first();
             $user->remember_token = $remember_token;
             $user->password = null;
+            $user->send = 'Y';
             $user->save();
             return redirect()->route('auth.login.view')->with('status', 'Your account password is reset please check your email...')->withInput();
         }else if ($request->reset == 'false'){
