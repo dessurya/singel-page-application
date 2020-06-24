@@ -7,14 +7,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Halo</title>
+        <link rel="icon" type="image/png" href="{{ asset('images/Logo.jpg') }}" />
         @include('_layout.include.css')
         <link rel="stylesheet" href="{{ asset('vendors/pnotify/pnotify.custom.min.css') }}">
 	</head>
-	<body>
+	<body style="background-color: #F7F7F7;">
 		<div style="position: relative; width: 100%; height: 120px; display: table;">
 			<div style="position: relative; display: table-row; width: 100%; height: 120px;">
 				<div style="position: relative; display: table-cell; width: 10%; height: 120px; vertical-align: middle; text-align: center;">
-					<img src="{{ asset('images/avatar.png') }}" height="80px;">
+					<img src="{{ asset('images/Profilling_Logo.jpg') }}" height="80px;">
 				</div>
 				<div style="position: relative; display: table-cell; width: 80%; height: 120px; vertical-align: middle; text-align: center;">
 					Welcome {{ Str::title(Auth::guard('user')->user()->name) }}<br>
@@ -26,7 +27,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="position: relative; width: 80%; margin: 0 auto;">
+		<div style="position: relative; width: 80%; margin: 0 auto; background-color: white; padding: 0 15px 15px;">
 			<div id="menu"></div>
 			<hr>
 			<div id="form"></div>

@@ -22,6 +22,7 @@ class CraeteUserTable extends Migration
             $table->string('picture')->nullable();
             $table->bigInteger('roll_id')->nullable()->unsigned();
             $table->rememberToken();
+            $table->string('send',1)->default('Y');
             $table->timestamps();
         });
 

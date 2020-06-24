@@ -9,6 +9,7 @@
 
     <title>Login Area</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('images/Logo.jpg') }}" />
     <!-- Bootstrap -->
     <link href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Font Awesome -->
@@ -50,7 +51,8 @@
 
             <form action="{{ route('auth.login') }}" method="POST">
               {{ csrf_field() }}
-              <h1>Login Form</h1>
+              <center><img src="{{ asset('images/Profilling_Logo.jpg') }}" height="80px;"></center>
+              <!-- <h1>Login Form</h1> -->
               <div>
                 <input 
                   name="email" 

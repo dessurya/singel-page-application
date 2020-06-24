@@ -20,8 +20,6 @@ Route::post('/signup/action', 'Auth\RegisterController@create')->name('auth.sign
 Route::post('/login/action', 'Auth\LoginController@login')->name('auth.login');
 Route::get('/login/action/token', 'Auth\LoginController@newUserLogin')->name('auth.login.token');
 
-
-
 Route::middleware('user')->group(function(){
 
 	Route::get('/clear_cache', function() {
@@ -30,7 +28,6 @@ Route::middleware('user')->group(function(){
 		    Artisan::call('route:clear');
 		    Artisan::call('view:clear');
 		    Artisan::call('cache:clear');
-			// Artisan::call('update');
 		    return 'Success, celar config,route,view,cache config and route';
 		}else{
 			return 'You not have access';
