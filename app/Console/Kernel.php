@@ -5,9 +5,9 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\LoginLinkMail;
 use App\Model\User;
+use App\Mail\LoginLinkMail;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function(){
-            $users = User::where('send','Y')->whereNull('password')->whereNotNull('remember_token')->orderBy('updated_at', 'desc')->limit(5)->get();
+        $schedule->call(function (){
+            $users = User::where('send','Y')->whereNull('password')->whereNotNull('remember_token')->orderBy('updated_at', 'asc')->limit(5)->get();
             foreach ($users as $user) {
                 Mail::to($user->email)->send(new LoginLinkMail($user));
                 $store = User::find($user->id);
@@ -37,6 +37,11 @@ class Kernel extends ConsoleKernel
                 $store->save();
             }
         })->everyMinute();
+
+        $schedule->command('artisan config:cache')->monthlyOn(5, '02:00');
+        $schedule->command('artisan route:clear')->monthlyOn(5, '02:05');
+        $schedule->command('artisan view:clear')->monthlyOn(5, '02:10');
+        $schedule->command('artisan cache:clear')->monthlyOn(5, '02:15');
     }
 
     /**

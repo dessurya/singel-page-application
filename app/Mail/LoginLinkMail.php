@@ -30,7 +30,7 @@ class LoginLinkMail extends Mailable
     public function build()
     {
         return $this->from([
-            'address'=>'sender@example.com',
+            'address'=>'asd.robot001@gmail.com',
             'name'=>'Robot Administrator'
         ])->subject('Your Login Link')->view('mails.LoginLink');
     }

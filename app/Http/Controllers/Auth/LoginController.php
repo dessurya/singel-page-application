@@ -94,7 +94,7 @@ class LoginController extends Controller
     private function loginId($code){
         $user = User::where('remember_token', $code)->first();
         if (empty($user)) {
-            return redirect()->route('auth.login.view')->with('status', 'Your link is out of date or has been used before')->withInput();
+            return redirect()->route('auth.login.view')->with('status', 'Your link is out of date or has been used before');
         }
         Auth::guard('user')->loginUsingId($user->id);
         $user = User::find(Auth::guard('user')->user()->id);
