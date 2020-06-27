@@ -262,6 +262,9 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function readExcelFile($data){
+			if (!file_exists('import_doc/')){
+				mkdir('import_doc/', 0777);
+			}
 			$file         = explode('/', $data['path']);
 	        $file         = Carbon::now()->format('Ymd_h_i_s').$file[count($file)-1];
 	        $file_dir     = 'import_doc/'.$file.'.xlsx';
