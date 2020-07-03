@@ -35,7 +35,7 @@ class ConfigRepository implements ConfigRepositoryInterface{
 
 	public function index($request){
 		if ($request['select'] == 'change_password') {
-			return $this->change_password();
+			return $this->change_password($request);
 		}else if ($request['select'] == 'selfUpdate') {
 			return $this->selfUpdate();
 		}else if ($request['select'] == 'takeProfilling') {
@@ -74,13 +74,17 @@ class ConfigRepository implements ConfigRepositoryInterface{
 		return Datatables::of($data)->escapeColumns(['*'])->make(true);
     }
 
-    public function change_password(){
+    public function change_password($request){
     	$type = 'new';
     	$account = User::find(Auth::guard('user')->user()->id);
     	if (!empty($account->password)) {
     		$type = 'old';
     	}
-    	$html = view('change_password', compact('type'))->render();
+        if ($type == 'old' and !isset($request['access'])) {
+            $html = null;
+        }else{
+            $html = view('change_password', compact('type'))->render();
+        }
     	return [
     		"responseType" => "change_password",
     		"callForm" => base64_encode($html)

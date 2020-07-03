@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="{{ asset('vendors/pnotify/pnotify.custom.min.css') }}">
 <link href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
 <link href="{{ asset('_css/custom.min.css') }}" rel="stylesheet">
 <link href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">

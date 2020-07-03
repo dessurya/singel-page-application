@@ -27,9 +27,9 @@ class UserRegistryRepository implements UserRegistryRepositoryInterface
     }
 
     public function signup($data){
-    	return $store = $this->storeUserData($data);
+    	$store = $this->storeUserData($data);
     	if ($store['Success'] == true) {
-    		$store['msg'] = 'Success, login';
+    		$store['msg'] = 'Success, please check your email we will send your login link';
     		$store['remember_token'] = $store['user']->remember_token;
     		$store['user'] = null;
     	}

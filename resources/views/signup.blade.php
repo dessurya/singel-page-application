@@ -14,6 +14,7 @@
     <link href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <link href="{{ asset('vendors/animate.css/animate.min.css') }}" rel="stylesheet">
     <link href="{{ asset('_css/custom.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendors/pnotify/pnotify.custom.min.css') }}">
     <style type="text/css">
       #boxOne{
         position: relative; margin: 20px auto; width: 65%;
@@ -21,11 +22,22 @@
       ul#myTab li{
         pointer-events: none;
       }
-      #info_alert{
-        width: 75%;
-        margin: 0 auto;
-        display: none;
-      }
+      /* loading page */
+        #loading-page{
+            position: fixed;
+            top: 0;
+            z-index: 99999;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(112,112,112,.4);
+            transition: all 1.51s;
+        }
+        #loading-page .dis-table .row .cel{
+            text-align: center;
+            width: 100%;
+            height: 100vh;
+        }
+    /* loading page */
       @media (max-width: 812px) {
         #boxOne{
           margin: 20px auto; width: 95%;
@@ -351,7 +363,6 @@
                             <button class="btn btn-success" type="submit">Save</button>
                           </div>
                         </div>
-                        <div id="info_alert" class="alert alert-info" role="alert"></div>
                     </form>
                   </div>
                 </div>
@@ -363,13 +374,28 @@
       </div>
 
     </div>
+
+    <div id="loading-page">
+      <div class="dis-table">
+        <div class="row">
+          <div class="cel">
+            <img src="{{ asset('images/loading_1.gif') }}">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script type="text/javascript" src="{{ asset('vendors/jquery/dist/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('_js/custom.min.js') }}"></script>
     <script src="{{ asset('vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('vendors/fastclick/lib/fastclick.js') }}"></script>
     <script src="{{ asset('vendors/nprogress/nprogress.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendors/pnotify/pnotify.custom.min.js') }}"></script>
     <script type="text/javascript">
-      
+      $( document ).ready(function() {
+        $('#loading-page').hide();
+      });
+
       $('form#formOne').submit(function(){
         var arr1 = getValueForm(['form#formOne input','form#formOne select']);
         sessionStorage.setItem("personal_data", JSON.stringify(arr1));
@@ -431,22 +457,36 @@
               dataType: 'json',
               data: data,
               beforeSend: function() {
-                  $('#button_send').hide();
-                  $('#info_alert').show().html('Waiting...! Send Your Request...!');
+                $('#loading-page').show();  
               },
               success: function(data) {
                 console.log(data);
                 if (data.Success == true) {
+                  pnotify(data.msg);
                   sessionStorage.removeItem("personal_data");
-                  window.location.replace("{{ route('auth.login.token') }}?rememberMe="+data.user.remember_token);
+                  window.setTimeout(function() {
+                    window.location.replace("{{ route('auth.login.view') }}");
+                  }, 2050);
+                }else{
+                  $.each(data.validator, function(indx, data){
+                    pnotify(data);
+                  });
                 }
                 window.setTimeout(function() {
-                  $('#info_alert').hide();
-                  $('#button_send').show();
+                  $('#loading-page').hide();
                 }, 1550);
 
               }
           });
+      }
+
+      function pnotify(data) {
+        new PNotify({
+          title: 'info',
+          text: data,
+          type: 'warning',
+          delay: 3000
+        });
       }
     </script>
     <script type="text/javascript" src="{{ asset('_js/gender2.js') }}"></script>

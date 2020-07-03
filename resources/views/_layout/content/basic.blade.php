@@ -9,7 +9,6 @@
         <title>Halo</title>
         <link rel="icon" type="image/png" href="{{ asset('images/Logo.jpg') }}" />
         @include('_layout.include.css')
-        <link rel="stylesheet" href="{{ asset('vendors/pnotify/pnotify.custom.min.css') }}">
 	</head>
 	<body style="background-color: #F7F7F7;">
 		<div style="position: relative; width: 100%; height: 120px; display: table;">
