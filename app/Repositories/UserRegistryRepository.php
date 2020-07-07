@@ -11,7 +11,6 @@ use App\Repositories\Interfaces\UserRegistryRepositoryInterface;
 
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Auth;
-use Hash;
 
 
 class UserRegistryRepository implements UserRegistryRepositoryInterface

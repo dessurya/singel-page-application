@@ -5,6 +5,7 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Hash;
 
 class User extends Authenticatable{
     
@@ -19,5 +20,9 @@ class User extends Authenticatable{
 
     public function getUserDetils(){
         return $this->hasOne('App\Model\UserDetils', 'user_id', 'id');
+    }
+
+    public function setPasswordAttribute($password){ 
+        return $this->attributes['password'] = Hash::make($password); 
     }
 }

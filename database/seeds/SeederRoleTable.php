@@ -22,6 +22,12 @@ class SeederRoleTable extends Seeder
     		'name' => 'public',
     		'access_menu' => '{"menu":[{"name":"MainMenu","tab":"mm","chld":[{"name":"UpdatePersonal","accKey":"selfUpdate"},{"name":"ViewProfilling","accKey":"selfProfillingHistory"},{"name":"TakeProfilling","accKey":"takeProfilling"}]}],"accKey":{"selfUpdate":{"view":true,"edit":true},"selfProfillingHistory":{"view":true},"takeProfilling":{"store":true}}}'
     	];
-    	Role::create($store);
+        foreach ($store as $row) {
+            $store = new Role;
+            $store->status = $row['status'];
+            $store->name = $row['name'];
+            $store->access_menu = $row['access_menu'];
+            $store->save();
+        }
     }
 }

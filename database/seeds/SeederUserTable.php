@@ -15,10 +15,16 @@ class SeederUserTable extends Seeder
     	$store = [
     		'name' => 'administrator',
     		'email' => 'your.administrator@try.you',
-    		'statu' => 'Y',
+    		'status' => 'Y',
     		'roll_id' => 1,
-    		'password' => Hash::make('try.you')
+    		'password' => 'try.you'
     	];
-    	User::create($store);
+        $store = new User;
+        $store->name = $store['name'];
+        $store->email = $store['email'];
+        $store->status = $store['status'];
+        $store->roll_id = $store['roll_id'];
+        $store->password = $store['password'];
+        $store->save();
     }
 }

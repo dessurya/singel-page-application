@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Model\COnfig;
+use App\Model\Config;
 
 class SeederConfigTable extends Seeder
 {
@@ -76,6 +76,11 @@ class SeederConfigTable extends Seeder
     		'accKey' => 'transaction',
     		'config' => '{"table":{"config":[{"data":"created","name":"created","searchable":true,"orderable":true},{"data":"email","name":"email","searchable":true,"orderable":true},{"data":"name","name":"name","searchable":true,"orderable":true},{"data":"phone","name":"handphone","searchable":true,"orderable":true},{"data":"consultant","name":"consultant","searchable":true,"orderable":true},{"data":"competencies","name":"competencies","searchable":true,"orderable":true},{"data":"status","name":"status","searchable":true,"orderable":true}],"url":"Vtransaction","sortBy":["name","desc"]}}'
     	];
-    	Config::create($store);
+        foreach ($store as $row) {
+            $store = new Config;
+            $store->accKey = $row['accKey'];
+            $store->config = $row['config'];
+            $store->save();
+        }
     }
 }

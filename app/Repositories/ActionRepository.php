@@ -145,7 +145,7 @@ class ActionRepository implements ActionRepositoryInterface{
 
     	if(empty($me->password) or Hash::check($storeData['old_password'], $me->password)){
 			if ($storeData['new_password'] == $storeData['cnfrm_password']) {
-				$me->password = Hash::make($storeData['new_password']);
+				$me->password = $storeData['new_password'];
 				$me->save();
 				return [
 					"Success" => true,
