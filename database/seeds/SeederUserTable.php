@@ -19,6 +19,6 @@ class SeederUserTable extends Seeder
     		'roll_id' => 1,
     		'password' => Hash::make('try.you')
     	];
-    	Role::create($store);
+    	User::create($store);
     }
 }
