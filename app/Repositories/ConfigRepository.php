@@ -112,7 +112,7 @@ class ConfigRepository implements ConfigRepositoryInterface{
     }
 
     public function takeProfilling(){
-    	$question = Question::where('status', 'Y')->orderBy('sort', 'asc')->orderBy('criteria', 'asc')->orderBy('question', 'asc')->get();
+    	$question = Question::where('status', 'Y')->orderBy('sort', 'asc')->orderBy('question', 'asc')->get();
     	$questionRender = [];
     	$build = null;
     	$countQuestion = count($question);

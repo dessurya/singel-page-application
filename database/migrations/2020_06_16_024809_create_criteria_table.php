@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuestionTable extends Migration
+class CreateCriteriaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateQuestionTable extends Migration
      */
     public function up()
     {
-        Schema::create('prof_question', function (Blueprint $table) {
+        Schema::create('prof_criteria', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('question');
-            $table->integer('sort')->default(1);
+            $table->string('criteria');
+            $table->integer('flag')->default(0);
+            $table->text('description')->nullable();
             $table->string('status')->default('Y');
             $table->timestamps();
         });
@@ -29,6 +30,6 @@ class CreateQuestionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prof_question');
+        Schema::dropIfExists('prof_criteria');
     }
 }

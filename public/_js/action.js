@@ -39,6 +39,7 @@ $(document).on('click', '#actionToolsGroupWrapper button', function(){
 	data['access'] = sessionStorage.getItem('accKey');
 	data['action'] = $(this).data('action');
 	data['select'] = $(this).data('select');
+	data['multiple'] = $(this).data('multiple');
 	data['acckey'] = $(this).data('key');
 	data['conf'] = $(this).data('conf');
 	data['template'] = $(this).data('template');
@@ -79,6 +80,43 @@ $(document).on('submit', 'form#storeData', function(){
 	return false;
 });
 
+$(document).on('submit', 'form#storeDataProfilling', function(){
+	var detil = {};
+	var count = 0;
+	$('form#storeDataProfilling table tbody tr').each(function(){
+		detil[$(this).attr('id')] = {
+			'criteriaId' : $('form#storeDataProfilling input[name=criteriaId]').val(),
+			'criteria' : $('form#storeDataProfilling input[name=criteria]').val(),
+			'questionId' : $('form#storeDataProfilling input[name=questionId]').val(),
+			'question' : $('form#storeDataProfilling input[name=question]').val(),
+			'id' : $(this).find('input[name=id]').val(),
+			'answerId' : $(this).find('input[name=answerId]').val(),
+			'answer' : $(this).find('input[name=answer]').val(),
+			'competenciesId' : $(this).find('input[name=competenciesId]').val(),
+			'competencies' : $(this).find('input[name=competencies]').val()
+		};
+		count += 1;
+	});
+	if (count == 0) {
+		pnotify({ 'title' : 'Info', 'text' : 'detil masih kosong ', 'type' : 'Warning' });
+		return false;
+	}
+	var input  = {};
+	input['access'] = sessionStorage.getItem('accKey');
+	input['acckey'] = $("form#storeDataProfilling input[name=acckey]").val();
+	input['action'] = $("form#storeDataProfilling input[name=action]").val();
+	input['store'] = $("form#storeDataProfilling input[name=store]").val();
+	input['storeData'] = detil;
+	var data = {};
+	data['title'] = 'Warning';
+	data['type'] = 'info';
+	data['text'] = 'Are You Sure Do This?';
+	data['input'] = {};
+	data['input']['data'] = input;
+	pnotifyConfirm(data);
+	return false;
+});
+
 $(document).on('click', 'button.accKeyProcess', function(){
 	$('button.accKeyProcess').removeClass('btn-info').addClass('btn-default');
 	$(this).removeClass('btn-default').addClass('btn-info');
@@ -101,13 +139,37 @@ $(document).on('click', 'input.indexOfSearch', function(){
 	val['input']['data']['storeData']['val'] = $(this).val();
 
 	sessionStorage.setItem("indexOfSearchTypeButton", $(this).data('type'));
+	sessionStorage.setItem("indexOfSearchTarget", $(this).data('target'));
+	sessionStorage.setItem("indexOfSearchParent", $(this).data('parent'));
 	$('#modal-indexOfSearch').modal('show');
 	postData(val,urlAction);
 });
 
+$(document).on('click', '#addDetilsProfilling', function(){
+	var val = {};
+	val['input'] = {};
+	val['input']['data'] = {};
+	val['input']['data']['acckey'] = 'addDetilsProfilling';
+	val['input']['data']['action'] = 'addDetilsProfilling';
+	postData(val,urlAction);
+});
+
+$(document).on('click', '.removeDetilsProfilling', function(){
+	var row = $(this).data('row');
+	$(row).remove();
+});
+
 $(document).on('click', '#modal-indexOfSearch .modal-footer button', function(){
-	var idSelect = getDataId(true, true);
-	if(idSelect == false){ return false; }
+	var newValue = $('input[name=new_value]').val();
+	var idSelect = getDataId({'select' : true, 'multiple' : false}, true);
+	
+	if (newValue.length > 0 && idSelect.length > 0) {
+		pnotify({ 'title' : 'Info', 'type' : 'error', 'text' : 'you only can choose data or create new value' });
+		return false;
+	}else if(newValue.length == 0 && (idSelect.length == 0 || idSelect === null || idSelect === undefined || idSelect === "" || idSelect === false )){
+		pnotify({ 'title' : 'Info', 'type' : 'error', 'text' : 'you must choose data or create new value' });
+		return false;
+	}
 	var val = {};
 	val['url'] = urlAction;
 	val['pcndt'] = true;
@@ -118,6 +180,9 @@ $(document).on('click', '#modal-indexOfSearch .modal-footer button', function(){
 	val['input']['data']['storeData'] = {};
 	val['input']['data']['storeData']['type'] = sessionStorage.getItem("indexOfSearchTypeButton");;
 	val['input']['data']['storeData']['id'] = idSelect;
+	val['input']['data']['storeData']['new'] = newValue;
+	val['input']['data']['storeData']['target'] = sessionStorage.getItem("indexOfSearchTarget");
+	val['input']['data']['storeData']['parent'] = sessionStorage.getItem("indexOfSearchParent");
 	$('#modal-indexOfSearch').modal('hide');
 	postData(val,urlAction);
 });

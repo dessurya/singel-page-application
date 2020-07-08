@@ -18,6 +18,7 @@ class CreateTransactionDetilsTable extends Migration
             $table->timestamps();
             $table->bigInteger('transaction')->nullable()->unsigned();
             $table->bigInteger('profilling')->nullable()->unsigned();
+            $table->bigInteger('criteria')->nullable()->unsigned();
             $table->bigInteger('question')->nullable()->unsigned();
             $table->bigInteger('answer')->nullable()->unsigned();
             $table->bigInteger('competencies')->nullable()->unsigned();
@@ -26,6 +27,7 @@ class CreateTransactionDetilsTable extends Migration
         Schema::table('prof_transaction_detils', function($table) {
             $table->foreign('transaction')->references('id')->on('prof_transaction')->onDelete('set null');
             $table->foreign('profilling')->references('id')->on('prof_profilling')->onDelete('set null');
+            $table->foreign('criteria')->references('id')->on('prof_criteria')->onDelete('set null');
             $table->foreign('question')->references('id')->on('prof_question')->onDelete('set null');
             $table->foreign('answer')->references('id')->on('prof_answer')->onDelete('set null');
             $table->foreign('competencies')->references('id')->on('prof_competencies')->onDelete('set null');

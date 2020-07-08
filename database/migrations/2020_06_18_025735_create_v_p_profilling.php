@@ -16,7 +16,8 @@ class CreateVPProfilling extends Migration
         DB::statement("CREATE OR REPLACE VIEW prof_vp_profilling AS (
                 SELECT 
                     p.id AS id,
-                    q.criteria AS criteria,
+                    cr.id AS criteria_id,
+                    cr.criteria AS criteria,
                     q.question AS question,
                     q.id AS question_id,
                     a.answer AS answer,
@@ -28,6 +29,7 @@ class CreateVPProfilling extends Migration
                 LEFT JOIN prof_competencies c ON p.competencies = c.id
                 LEFT JOIN prof_answer a ON p.answer = a.id
                 LEFT JOIN prof_question q ON p.question = q.id
+                LEFT JOIN prof_criteria cr ON p.criteria = cr.id
             )
         ");
     }

@@ -15,7 +15,8 @@ class CreateProfillingTable extends Migration
     {
         Schema::create('prof_profilling', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('status')->default('N');
+            $table->string('status')->default('Y');
+            $table->bigInteger('criteria')->nullable()->unsigned();
             $table->bigInteger('question')->nullable()->unsigned();
             $table->bigInteger('answer')->nullable()->unsigned();
             $table->bigInteger('competencies')->nullable()->unsigned();
@@ -23,6 +24,7 @@ class CreateProfillingTable extends Migration
         });
 
         Schema::table('prof_profilling', function($table) {
+            $table->foreign('criteria')->references('id')->on('prof_criteria')->onDelete('set null');
             $table->foreign('question')->references('id')->on('prof_question')->onDelete('set null');
             $table->foreign('answer')->references('id')->on('prof_answer')->onDelete('set null');
             $table->foreign('competencies')->references('id')->on('prof_competencies')->onDelete('set null');

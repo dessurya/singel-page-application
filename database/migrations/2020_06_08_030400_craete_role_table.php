@@ -16,7 +16,7 @@ class CraeteRoleTable extends Migration
         Schema::create('prof_role', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('status')->default('N');
+            $table->string('status')->default('Y');
             $table->text('access_menu');
             $table->timestamps();
         });

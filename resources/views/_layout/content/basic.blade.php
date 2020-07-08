@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</div>
-		<div style="position: relative; width: 80%; margin: 0 auto; background-color: white; padding: 0 15px 15px;">
+		<div style="position: relative; width: 90%; margin: 0 auto; background-color: white; padding: 0 15px 15px;">
 			<div id="menu"></div>
 			<hr>
 			<div id="form"></div>
@@ -34,7 +34,7 @@
 		</div>
 
 		<div class="modal fade" id="modal-indexOfSearch">
-			<div class="modal-dialog">
+			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<div class="modal-header">
 						<h4 class="modal-title"></h4>
@@ -42,7 +42,7 @@
 					<div class="modal-body">
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-info pull-left">Select</button>
+						<button type="button" class="btn btn-info pull-left">Process</button>
 					</div>
 				</div>
 			</div>

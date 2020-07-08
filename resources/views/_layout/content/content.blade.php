@@ -5,14 +5,14 @@
 			@if(isset($access['template']) and $access['template'] == true)
 			<button type="button" 
 			data-key="{{ $access['key'] }}" data-conf="false" data-action="template" data-select="false"
-			data-template="{{ asset($access['config']['template']) }}"
+			data-template="{{ asset($access['config']['template']) }}" data-multiple="false"
 			title="Template"
 			class="btn btn-info"><i class="fa fa-cloud-download"></i></button>
 			@endif
 			@if(isset($access['upload']) and $access['upload'] == true)
 			<button type="button" 
 			data-key="{{ $access['key'] }}" data-conf="false" data-action="upload" data-select="false"
-			data-template=""
+			data-template="" data-multiple="false"
 			title="Upload"
 			class="btn btn-info" for="upload"><i class="fa fa-cloud-upload"></i></button>
 			<input class="import" type="file" data-type="profilling" accept=".xlsx" style="display: none;">
@@ -20,32 +20,37 @@
 			@if(isset($access['add']) and $access['add'] == true)
 			<button type="button" 
 			data-key="{{ $access['key'] }}" data-conf="false" data-action="add" data-select="false"
-			data-template=""
+			data-template="" data-multiple="false"
 			title="Add"
 			class="btn btn-info"><i class="fa fa-plus"></i></button>
 			@endif
 			@if(isset($access['view']) and $access['view'] == true)
 			<button type="button" 
 			data-key="{{ $access['key'] }}" data-conf="false" data-action="view" data-select="true"
-			data-template=""
+			data-template="" data-multiple="false"
 			title="Open"
 			class="btn btn-info"><i class="fa fa-folder-open"></i></button>
 			@endif
 			@if(isset($access['Activated/Inactivated']) and $access['Activated/Inactivated'] == true)
 			<button type="button" 
 			data-key="{{ $access['key'] }}" data-conf="true" data-action="Activated/Inactivated" data-select="true"
-			data-template=""
+			data-template="" data-multiple="true"
 			title="Activated/Inactivated"
 			class="btn btn-info"><i class="fa fa-power-off"></i></button>
 			@endif
-			<!-- <button id="dtSelectedAll" type="button" class="btn btn-info">
-				<i class="fa fa-check-square-o"></i> Selected All
-			</button>
-			<button id="dtUnselectedAll" type="button" class="btn btn-info">
-				<i class="fa fa-square"></i> Unselected All
-			</button> -->
+			<span id="dtSelectedAll" class="btn btn-info" title="Selected All">
+				<i class="fa fa-check-square-o"></i>
+			</span>
+			<span id="dtUnselectedAll" class="btn btn-info" title="Unselected All">
+				<i class="fa fa-square"></i>
+			</span>
 		</div>
 	</div>
+</div>
+@else
+<div class="form-group">
+	New Value <span class="new_value error"></span>
+	<input  autocomplete="off" name="new_value" type="text" class="form-control" placeholder="New Value">
 </div>
 @endif
 <div style="clear: both;"></div>

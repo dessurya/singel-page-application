@@ -17,7 +17,7 @@ class CreateMasterTable extends Migration
             $table->bigIncrements('id');
             $table->string('type');
             $table->string('value');
-            $table->string('status')->default('N');
+            $table->string('status')->default('Y');
             $table->timestamps();
         });
     }

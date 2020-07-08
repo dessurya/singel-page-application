@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use App\Model\User;
-use Hash;
 
 class SeederUserTable extends Seeder
 {
@@ -12,19 +11,20 @@ class SeederUserTable extends Seeder
      * @return void
      */
     public function run(){
-    	$store = [
-    		'name' => 'administrator',
-    		'email' => 'your.administrator@try.you',
-    		'status' => 'Y',
-    		'roll_id' => 1,
-    		'password' => 'try.you'
-    	];
         $store = new User;
-        $store->name = $store['name'];
-        $store->email = $store['email'];
-        $store->status = $store['status'];
-        $store->roll_id = $store['roll_id'];
-        $store->password = $store['password'];
+        $store->name = 'administrator';
+        $store->email = 'your.administrator@try.you';
+        $store->status = 'Y';
+        $store->roll_id = 1;
+        $store->password = 'try.you';
+        $store->save();
+
+        $store = new User;
+        $store->name = 'Adam';
+        $store->email = 'fourline66@gmail.com';
+        $store->status = 'Y';
+        $store->roll_id = 1;
+        $store->password = 'asdasd';
         $store->save();
     }
 }

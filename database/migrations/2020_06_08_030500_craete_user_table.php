@@ -17,7 +17,7 @@ class CraeteUserTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('email')->uniqe();
-            $table->string('status')->default('N');
+            $table->string('status')->default('Y');
             $table->string('password')->nullable();
             $table->string('picture')->nullable();
             $table->bigInteger('roll_id')->nullable()->unsigned();

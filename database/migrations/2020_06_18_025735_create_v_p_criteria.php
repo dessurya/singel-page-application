@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVPQuestion extends Migration
+class CreateVPCriteria extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,14 @@ class CreateVPQuestion extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE OR REPLACE VIEW prof_vp_question AS (
+        DB::statement("CREATE OR REPLACE VIEW prof_vp_criteria AS (
                 SELECT 
                     id,
-                    sort,
-                    question,
+                    criteria,
+                    flag,
+                    description,
                     status
-                FROM prof_question
+                FROM prof_criteria
             )
         ");
     }
@@ -31,6 +32,6 @@ class CreateVPQuestion extends Migration
      */
     public function down()
     {
-        DB::statement("DROP VIEW IF EXISTS prof_vp_question");
+        DB::statement("DROP VIEW IF EXISTS prof_vp_criteria");
     }
 }

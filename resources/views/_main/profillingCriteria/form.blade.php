@@ -12,31 +12,45 @@
 				<input type="hidden" name="id" value="{{ !empty($var) ? $var['id'] : ''  }}">
 				<div class="col-sm-6">
 					<div class="form-group">
-						Sort <span class="sort error"></span>
+						Criteria <span class="criteria error"></span>
 						<input 
 							@if(in_array($action,['add','edit']))
 							required
 							@elseif($action=='view')
 							readonly 
 							@endif
-							name="sort" 
-							type="number" 
-							value="{{ !empty($var) ? $var['sort'] : '' }}" 
+							value="{{ !empty($var) ? $var['criteria'] : '' }}" 
+							name="criteria" 
+							type="text"
 							class="form-control">
 					</div>
 				</div>
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<div class="form-group">
-						Question <span class="question error"></span>
-						<textarea 
+						Flag <span class="flag error"></span>
+						<input 
 							@if(in_array($action,['add','edit']))
 							required
 							@elseif($action=='view')
 							readonly 
 							@endif
-							name="question" 
+							name="flag" 
 							type="text"
-							class="form-control">{{ !empty($var) ? $var['question'] : '' }}</textarea>
+							value="{{ !empty($var) ? $var['flag'] : '' }}" 
+							class="form-control">
+					</div>
+				</div>
+				<div class="col-sm-12">
+					<div class="form-group">
+						Description <span class="description error"></span>
+						<textarea 
+							@if(in_array($action,['add','edit']))
+							@elseif($action=='view')
+							readonly 
+							@endif
+							name="description" 
+							type="text"
+							class="form-control">{{ !empty($var) ? $var['description'] : '' }}</textarea>
 					</div>
 				</div>
 			</div>

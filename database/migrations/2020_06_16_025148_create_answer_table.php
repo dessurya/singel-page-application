@@ -16,7 +16,7 @@ class CreateAnswerTable extends Migration
         Schema::create('prof_answer', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('answer');
-            $table->string('status')->default('N');
+            $table->string('status')->default('Y');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ use App\Model\Master;
 use App\Model\Role;
 use App\Model\User;
 use App\Model\UserDetils;
+use App\Model\Criteria;
 use App\Model\Question;
 use App\Model\Answer;
 use App\Model\Competencies;
@@ -32,6 +33,8 @@ class ActionRepository implements ActionRepositoryInterface{
 			return $this->indexOfSearch($data);
 		}else if ($data['input']['data']['acckey'] == 'indexOfSearchProcess' and $data['input']['data']['action'] == 'indexOfSearchProcess') {
 			return $this->indexOfSearchProcess($data);
+		}else if ($data['input']['data']['acckey'] == 'addDetilsProfilling' and $data['input']['data']['action'] == 'addDetilsProfilling') {
+			return $this->addDetilsProfilling($data);
 		}else if ($data['input']['data']['acckey'] == 'takeProfilling' and $data['input']['data']['action'] == 'takeProfilling') {
 			return $this->takeProfilling($data);
 		}
@@ -122,17 +125,35 @@ class ActionRepository implements ActionRepositoryInterface{
 	}
 
 	private function indexOfSearchProcess($data){
-		$access = [];
 		$config = Config::where('accKey',$data['input']['data']['storeData']['type'])->first();
 		$config = json_decode($config->config, true);
 		$Model = "App\Model\\".$config['table']['url'];
-		$get = $Model::where('id',$data['input']['data']['storeData']['id'])->get();
+		
+		if (!empty($data['input']['data']['storeData']['id'])) {
+			$get = $Model::where('id',$data['input']['data']['storeData']['id'])->get();
+		}else if (!empty($data['input']['data']['storeData']['new'])) {
+			$set = [ $config['table']['valOfField'] => $data['input']['data']['storeData']['new'] ];
+			$store = $Model::insertGetId($set);
+			$get = $Model::where('id',$store)->get();
+		}
 		$get = $get[0];
+		$get = json_decode(json_encode($get), true);
+		$fillInput = [];
+        $target = explode('|', $data['input']['data']['storeData']['target']);
+        foreach ($target as $rData) {
+            $rDataEx = explode('-', $rData);
+            $key = $rDataEx[0];
+            if (!empty($data['input']['data']['storeData']['parent'])) {
+                $key = $data['input']['data']['storeData']['parent'].' '.$key;
+            }
+            $fillInput[] = [
+                'key' => $key,
+                'val' => $get[$rDataEx[1]]
+            ];
+        }
 		return [
 			'responseType' => 'indexOfSearchResponse',
-			'type' => $data['input']['data']['storeData']['type'],
-			'dataId' => $get['id'],
-			'valOfField' => $get[$config['table']['valOfField']]
+			'fillInput' => $fillInput
 		];
 	}
 
@@ -174,67 +195,20 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 	}
 
+	private function addDetilsProfilling($data){
+		$rand = Str::random(6);
+		$html = view('_main.profilling.detils', compact('rand'))->render();
+		return [
+			"responseType" => "appendTo",
+			"target" => "#storeDataProfilling table tbody",
+			"content" => base64_encode($html)
+		];
+	}
+
 	// public
 		private function getFunct($key){
-			if (in_array($key, ['masterMarital_add', 'masterReligion_add', 'masterIndustry_add', 'masterLevel_add', 'masterEducation_add', 'masterCompetencies_add', 'masterMarital_view', 'masterReligion_view', 'masterIndustry_view', 'masterLevel_view', 'masterEducation_view', 'masterCompetencies_view'])) {
-				return 'masterForm';
-			}else if (in_array($key, ['masterMarital_add_store', 'masterReligion_add_store', 'masterIndustry_add_store', 'masterLevel_add_store', 'masterEducation_add_store', 'masterCompetencies_add_store', 'masterMarital_edit_store', 'masterReligion_edit_store', 'masterIndustry_edit_store', 'masterLevel_edit_store', 'masterEducation_edit_store', 'masterCompetencies_edit_store'])) {
-				return 'masterStore';
-			}else if (in_array($key, ['masterMarital_Activated/Inactivated', 'masterReligion_Activated/Inactivated', 'masterIndustry_Activated/Inactivated', 'masterLevel_Activated/Inactivated', 'masterEducation_Activated/Inactivated', 'masterCompetencies_Activated/Inactivated'])) {
-				return 'masterActivatedInactivated';
-			}else if (in_array($key, ['uarUser_add','uarUser_view'])) {
-				return 'uarUserForm';
-			}else if (in_array($key, ['uarUser_add_store','uarUser_edit_store'])) {
-				return 'uarUserStore';
-			}else if (in_array($key, ['uarUser_Activated/Inactivated'])) {
-				return 'uarUserActivatedInactivated';
-			}else if (in_array($key, ['uarAdmin_add', 'uarAdmin_view'])) {
-				return 'uarAdminForm';
-			}else if (in_array($key, ['uarAdmin_add_store', 'uarAdmin_edit_store'])) {
-				return 'uarAdminStore';
-			}else if (in_array($key, ['uarAdmin_Activated/Inactivated'])) {
-				return 'uarAdminActivatedInactivated';
-			}else if (in_array($key, ['uarRole_add', 'uarRole_view'])) {
-				return 'uarRoleForm';
-			}else if (in_array($key, ['uarRole_add_store', 'uarRole_edit_store'])) {
-				return 'uarRoleStore';
-			}else if (in_array($key, ['uarRole_Activated/Inactivated'])) {
-				return 'uarRoleActivatedInactivated';
-			}else if (in_array($key, ['profillingQuestion_add','profillingQuestion_view'])) {
-				return 'profillingQuestionForm';
-			}else if (in_array($key, ['profillingQuestion_add_store', 'profillingQuestion_edit_store'])) {
-				return 'profillingQuestionStore';
-			}else if (in_array($key, ['profillingQuestion_Activated/Inactivated'])) {
-				return 'profillingQuestionActivatedInactivated';
-			}else if (in_array($key, ['profillingAnswer_add','profillingAnswer_view'])) {
-				return 'profillingAnswerForm';
-			}else if (in_array($key, ['profillingAnswer_add_store', 'profillingAnswer_edit_store'])) {
-				return 'profillingAnswerStore';
-			}else if (in_array($key, ['profillingAnswer_Activated/Inactivated'])) {
-				return 'profillingAnswerActivatedInactivated';
-			}else if (in_array($key, ['profillingCompetencies_add','profillingCompetencies_view'])) {
-				return 'profillingCompetenciesForm';
-			}else if (in_array($key, ['profillingCompetencies_add_store', 'profillingCompetencies_edit_store'])) {
-				return 'profillingCompetenciesStore';
-			}else if (in_array($key, ['profillingCompetencies_Activated/Inactivated'])) {
-				return 'profillingCompetenciesActivatedInactivated';
-			}else if (in_array($key, ['profilling_add','profilling_view'])) {
-				return 'profillingForm';
-			}else if (in_array($key, ['profilling_add_store', 'profilling_edit_store'])) {
-				return 'profillingStore';
-			}else if (in_array($key, ['profilling_Activated/Inactivated'])) {
-				return 'profillingActivatedInactivated';
-			}else if (in_array($key, ['selfUpdate_edit_store'])) {
-				return 'uarUserStore';
-			}else if (in_array($key, ['transaction_view', 'selfProfillingHistory_view'])) {
-				return 'transactionView';
-			}else if (in_array($key, ['transaction_revision/finalise_store'])) {
-				return 'transactionStore';
-			}else if (in_array($key, ['profilling_upload'])) {
-				return 'profillingUpload';
-			}else if (in_array($key, ['uarUser_upload'])) {
-				return 'uarUserUpload';
-			}
+			$ret = Config::where('accKey', $key)->first();
+			return $ret->config;
 		}
 
 		private function callForm($data, $reloadTable = false){
@@ -375,10 +349,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function uarUserActivatedInactivated($data){
-			$store = User::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = User::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -559,10 +536,13 @@ class ActionRepository implements ActionRepositoryInterface{
 					"info" => "Tidak dapat merubah data sendiri!"
 				];
 			}
-			$store = User::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = User::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -704,10 +684,13 @@ class ActionRepository implements ActionRepositoryInterface{
 					"info" => "Merupakan data master tidak diperbolehkan untuk diubah!"
 				];
 			}
-			$store = Role::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Role::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -774,10 +757,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function masterActivatedInactivated($data){
-			$store = Master::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Master::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -785,6 +771,77 @@ class ActionRepository implements ActionRepositoryInterface{
 			];
 		}
 	// master
+
+	// profillingCriteria
+		private function profillingCriteriaForm($data){
+			$var = null;
+			$title = 'Add';
+			$type = str_replace('profilling', '', $data['input']['data']['acckey']);
+			$action = $data['input']['data']['action'];
+			$acckey = $data['input']['data']['acckey'];
+			if (!empty($data['input']['id']) and $data['input']['id'] != 'true') {
+				$var = Criteria::find($data['input']['id']);
+				$title = 'View';
+				$access = json_decode(base64_decode($data['input']['data']['access']),true);
+				if (array_key_exists($data['input']['data']['acckey'],$access) and $access[$data['input']['data']['acckey']]['edit'] == true){
+					$title = 'Edit';
+					$action = 'edit';
+				}
+			}
+			$title .= ' '.$type;
+
+			$html = view('_main.profillingCriteria.form', compact('var','acckey', 'action', 'title'))->render();
+			return $this->callForm($html);
+		}
+
+		private function profillingCriteriaStore($data){
+			$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
+			$condtion = [
+				'criteria' => $storeData['criteria']
+			];
+			if (empty($storeData['id'])) {
+				$check = Criteria::where($condtion)->count();
+			}else{
+				$check = Criteria::where($condtion)->whereNotIn('id', [$storeData['id']])->count();
+			}
+			if ($check >= 1) { 
+				return [
+					"Success" => false,
+					"responseType" => "storeFormData",
+					"info" => "Data Sudah ada!"
+				];
+			}
+			if (empty($storeData['id'])) {
+				$store = new Criteria;
+			}else{
+				$store = Criteria::find($storeData['id']);
+			}
+			$store->criteria = $storeData['criteria'];
+			$store->flag = $storeData['flag'];
+			$store->description = $storeData['description'];
+			$store->save();
+			return [
+				"Success" => true,
+				"responseType" => "storeFormData",
+				"info" => "Success!"
+			];
+		}
+
+		private function profillingCriteriaActivatedInactivated($data){
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Criteria::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
+			return [
+				"Success" => true,
+				"responseType" => "storeFormData",
+				"info" => "Success!"
+			];
+		}
+	// profillingCriteria
 
 	// profillingQuestion
 		private function profillingQuestionForm($data){
@@ -831,7 +888,6 @@ class ActionRepository implements ActionRepositoryInterface{
 				$store = Question::find($storeData['id']);
 			}
 			$store->question = $storeData['question'];
-			$store->criteria = $storeData['criteria'];
 			$store->sort = $storeData['sort'];
 			$store->save();
 			return [
@@ -842,10 +898,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function profillingQuestionActivatedInactivated($data){
-			$store = Question::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Question::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -908,10 +967,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function profillingAnswerActivatedInactivated($data){
-			$store = Answer::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Answer::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -974,10 +1036,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function profillingCompetenciesActivatedInactivated($data){
-			$store = Competencies::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Competencies::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -1009,45 +1074,49 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function profillingStore($data){
-			$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
-			$condtion = [
-				'question' => $storeData['questionId'],
-				'answer' => $storeData['answerId'],
-				'competencies' => $storeData['competenciesId']
-			];
-			if (empty($storeData['id'])) {
-				$check = Profilling::where($condtion)->count();
-			}else{
-				$check = Profilling::where($condtion)->whereNotIn('id', [$storeData['id']])->count();
-			}
-			if ($check >= 1) { 
-				return [
-					"Success" => false,
-					"responseType" => "storeFormData",
-					"info" => "Data Sudah ada!"
+			$result = [];
+	        $result['true'] = [];
+	        $result['false'] = [];
+			foreach ($data['input']['data']['storeData'] as $key => $storeData) {
+				$condtion = [
+					'criteria' => $storeData['criteriaId'],
+					'question' => $storeData['questionId'],
+					'answer' => $storeData['answerId'],
+					'competencies' => $storeData['competenciesId']
 				];
+				if (empty($storeData['id'])) {
+					$check = Profilling::where($condtion)->count();
+				}else{
+					$check = Profilling::where($condtion)->whereNotIn('id', [$storeData['id']])->count();
+				}
+				if ($check >= 1) { 
+					$result['false'][] = $storeData;
+				}else{
+					if (empty($storeData['id'])) {
+						$store = new Profilling;
+					}else{
+						$store = Profilling::find($storeData['id']);
+					}
+					$store->criteria = $storeData['criteriaId'];
+					$store->question = $storeData['questionId'];
+					$store->answer = $storeData['answerId'];
+					$store->competencies = $storeData['competenciesId'];
+					$store->save();
+					$result['true'][] = $storeData;
+				}
 			}
-			if (empty($storeData['id'])) {
-				$store = new Profilling;
-			}else{
-				$store = Profilling::find($storeData['id']);
-			}
-			$store->question = $storeData['questionId'];
-			$store->answer = $storeData['answerId'];
-			$store->competencies = $storeData['competenciesId'];
-			$store->save();
-			return [
-				"Success" => true,
-				"responseType" => "storeFormData",
-				"info" => "Success!"
-			];
+			$html = view('_main.profilling.import', compact('result'))->render();
+			return $this->callForm($html, true);
 		}
 
 		private function profillingActivatedInactivated($data){
-			$store = Profilling::find($data['input']['data']['id']);
-			if ($store->status == 'N') { $store->status = 'Y'; }
-			else { $store->status = 'N'; }
-			$store->save();
+			$id = explode('^', $data['input']['data']['id']);
+			$stores = Profilling::whereIn('id',$id)->get();
+			foreach ($stores as $store) {
+				if ($store->status == 'N') { $store->status = 'Y'; }
+				else { $store->status = 'N'; }
+				$store->save();
+			}
 			return [
 				"Success" => true,
 				"responseType" => "storeFormData",
@@ -1093,9 +1162,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		}
 
 		private function profillingUploadStore($data){
+			$GetCriteria = $this->profillingUploadStoreGetComponen([
+				'model' => 'App\Model\Criteria',
+				'store' => ['criteria' => $data['criteria']]
+			]);
 			$GetQuestion = $this->profillingUploadStoreGetComponen([
 				'model' => 'App\Model\Question',
-				'store' => ['criteria' => $data['criteria'], 'question' => $data['question']]
+				'store' => ['question' => $data['question']]
 			]);
 			$GetAnswer = $this->profillingUploadStoreGetComponen([
 				'model' => 'App\Model\Answer',
@@ -1108,6 +1181,7 @@ class ActionRepository implements ActionRepositoryInterface{
 			$storeData = [
 				'competencies' => $GetCompetencies,
 				'answer' => $GetAnswer,
+				'criteria' => $GetCriteria,
 				'question' => $GetQuestion
 			];
 			$cekOld = Profilling::where($storeData)->first();
@@ -1126,7 +1200,7 @@ class ActionRepository implements ActionRepositoryInterface{
 			if (!empty($cekOld)) { return $cekOld->id; }
 			else { 
 				$data['store']['status'] = 'Y';
-				return $store = $ModelD::insertGetId($data['store']); 
+				return $store = $ModelD::insertGetId($data['store']);
 			}
 		}
 	// profilling

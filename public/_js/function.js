@@ -26,8 +26,9 @@ function indexOfSearch(data) {
 }
 
 function indexOfSearchResponse(data) {
-	$('#form form#storeData input.indexOfSearchId.'+data.type).val(data.dataId);
-	$('#form form#storeData input.indexOfSearch.'+data.type).val(data.valOfField);
+	$.each(data.fillInput, function(key, row) {
+		$('#form form#storeDataProfilling '+row.key).val(row.val);
+	});
 	return true;
 }
 
@@ -71,10 +72,10 @@ function pageOfQuestionShow(page) {
 
 function storeFormData(data) {
 	var pndata = {};
-	pndata['title'] = 'Info';
-	pndata['type'] = 'Warning';
-	pndata['text'] = data.info;
-	pnotify(pndata); 
+	// pndata['title'] = 'Info';
+	// pndata['type'] = 'Warning';
+	// pndata['text'] = data.info;
+	// pnotify(pndata); 
 	if(data.reloadForm === undefined){
 		$("#form").html('');
 	}
@@ -126,6 +127,8 @@ function responsePostData(data){
 		window.setTimeout(function() {
 			location.reload();
 		}, 1550);
+	}else if (data.responseType == 'appendTo') {
+		$(data.target).append(atob(data.content));
 	}
 }
 
@@ -245,7 +248,7 @@ function actionToolsExcute(data) {
 		$('input[type=file]').focus().trigger('click'); 
 		return false; 
 	}
-	var id = getDataId(data.select, false);
+	var id = getDataId({'select' : data.select, 'multiple' : data.multiple}, false);
 	if(id == false){ return false; }
 	var val = {};
 	if(data.conf == true){
@@ -284,8 +287,8 @@ function importExcute() {
 	$('input.import').val(null);
 }
 
-function getDataId(select, target){
-	if(select == false){ return true; }
+function getDataId(data, target){
+	if(data.select == false){ return true; }
 	var idData = "";
 	if(target == false){
 		$('table#table-data tbody tr.selected').each(function(){
@@ -299,13 +302,13 @@ function getDataId(select, target){
 	var getLength = idData.length-1;
 	idData = idData.substr(0, getLength);
 	var pndata = {};
-	if(idData === null || idData === '' || idData === undefined){
+	if((idData === null || idData === '' || idData === undefined) && target == false){
 		pndata['title'] = 'Info';
 		pndata['type'] = 'error';
 		pndata['text'] = 'No Data Selected!';
 		pnotify(pndata);
 		return false;
-	}else if( idData.indexOf('^') > -1){
+	}else if( data.multiple == false && idData.indexOf('^') > -1){
 		pndata['title'] = 'Info';
 		pndata['type'] = 'error';
 		pndata['text'] = 'You only can selected one data!';
