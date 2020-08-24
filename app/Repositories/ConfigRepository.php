@@ -40,6 +40,8 @@ class ConfigRepository implements ConfigRepositoryInterface{
 			return $this->selfUpdate();
 		}else if ($request['select'] == 'takeProfilling') {
 			return $this->takeProfilling();
+		}else if ($request['select'] == 'report') {
+			return $this->report();
 		}
 		$access = json_decode(base64_decode($request['access']),true);
 		if (array_key_exists($request['select'],$access)) {
@@ -133,5 +135,9 @@ class ConfigRepository implements ConfigRepositoryInterface{
     		"question" => $questionRender,
     		"callForm" => base64_encode($html)
     	];
-    }
+	}
+	
+	public function report(){
+		return 'this report';
+	}
 }

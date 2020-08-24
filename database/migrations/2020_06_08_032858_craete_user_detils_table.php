@@ -15,7 +15,7 @@ class CraeteUserDetilsTable extends Migration
     {
         Schema::create('prof_user_detils', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('date_of_birth');
+            $table->date('date_of_birth');
             $table->string('phone')->nullable();
             $table->string('gender')->nullable();
             $table->string('religion')->nullable();
