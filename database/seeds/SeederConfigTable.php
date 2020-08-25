@@ -84,6 +84,7 @@ class SeederConfigTable extends Seeder
         $store[] = [ 'accKey' => 'profilling_upload', 'config' => 'profillingUpload' ];
         $store[] = [ 'accKey' => 'transaction_revision/finalise_store', 'config' => 'transactionStore' ];
         $store[] = [ 'accKey' => 'transaction_view', 'config' => 'transactionView' ];
+        $store[] = [ 'accKey' => 'transaction_report', 'config' => 'transactionReport' ];
         $store[] = [ 'accKey' => 'selfProfillingHistory_view', 'config' => 'transactionView' ];
         $store[] = [ 'accKey' => 'selfUpdate_edit_store', 'config' => 'uarUserStore' ];
         $store[] = [ 'accKey' => 'profilling_Activated/Inactivated', 'config' => 'profillingActivatedInactivated' ];

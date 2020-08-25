@@ -1255,5 +1255,42 @@ class ActionRepository implements ActionRepositoryInterface{
 				"info" => "Success!"
 			];
 		}
+
+		private function transactionReport($data)
+		{
+			$resp = [];
+			$Transaction = Transaction::find($data['input']['id']);
+			$TransactionDetils = TransactionDetils::with('getCriteria','getCompetencies')->where([
+				'transaction' => $data['input']['id']
+			])->orderBy('id','asc')->get();
+			$resp['TH'] = $Transaction;
+			$resp['TD'] = $TransactionDetils;
+			$countCriteria = [];
+			$countCompetencies = [];
+			foreach ($TransactionDetils as $row) {
+				if (isset($countCriteria[$row->getCriteria->criteria])) { $countCriteria[$row->getCriteria->criteria] += 1; }
+				else{ $countCriteria[$row->getCriteria->criteria] = 1; }
+				if (isset($countCompetencies[$row->getCompetencies->competencies])) { $countCompetencies[$row->getCompetencies->competencies] += 1; }
+				else{ $countCompetencies[$row->getCompetencies->competencies] = 1; }
+			}
+			$countCriteria = arsort($countCriteria);
+			$countCompetencies = arsort($countCompetencies);
+			$resp['countCriteria'] = $countCriteria;
+			$resp['countCompetencies'] = $countCompetencies;
+			
+			// $Criteria = Criteria::where('status','Y')->get();
+			// $resp['Criteria'] = [];
+			// foreach ($Criteria as $item) {
+			// 	$TransactionDetils = TransactionDetils::with('getQuestion','getAnswer','getCompetencies')->where([
+			// 		'transaction' => $data['input']['id'],
+			// 		'criteria' => $item->id
+			// 	])->orderBy('id','asc')->get();
+			// 	$resp['Criteria'][$item->id] = [
+			// 		'parent' => $item,
+			// 		'self' => $TransactionDetils
+			// 	];
+			// }
+			return $resp;
+		}
 	// transaction
 }

@@ -17,6 +17,13 @@
 			class="btn btn-info" for="upload"><i class="fa fa-cloud-upload"></i></button>
 			<input class="import" type="file" data-type="profilling" accept=".xlsx" style="display: none;">
 			@endif
+			@if(isset($access['report']) and $access['report'] == true)
+			<button type="button" 
+			data-key="{{ $access['key'] }}" data-conf="false" data-action="report" data-select="true"
+			data-template="" data-multiple="false"
+			title="Report"
+			class="btn btn-info"><i class="fa fa-file-text"></i></button>
+			@endif
 			@if(isset($access['add']) and $access['add'] == true)
 			<button type="button" 
 			data-key="{{ $access['key'] }}" data-conf="false" data-action="add" data-select="false"
