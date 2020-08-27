@@ -1285,7 +1285,7 @@ class ActionRepository implements ActionRepositoryInterface{
 			}
 			$Transaction->result = json_decode($Transaction->result);
 			$view = view('_main.transaction.report', compact('Transaction'))->render();
-			$nameFile = Str::slug($Transaction->name,'_').Carbon::now()->format('Ymd').'.xlsx';
+			$nameFile = Str::slug($Transaction->name,'_').Carbon::now()->format('Ymd');
 			return [
 				"Success" => true,
 				"responseType" => "generateExcelReport",
