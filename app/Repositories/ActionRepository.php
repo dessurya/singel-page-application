@@ -7,7 +7,9 @@ use Hash;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Artisan;
 use PhpOffice\PhpSpreadsheet\IOFactory; 
+use PhpOffice\PhpSpreadsheet\Reader\Html as ReaderHtmlPhpSpreadsheet;
 use App\Repositories\Interfaces\ActionRepositoryInterface;
 
 use App\Model\Config;
@@ -68,6 +70,7 @@ class ActionRepository implements ActionRepositoryInterface{
 				$detils = new TransactionDetils;
 				$detils->transaction = $head->id;
 				$detils->profilling = $profilling->id;
+				$detils->criteria = $profilling->criteria;
 				$detils->question = $profilling->question;
 				$detils->answer = $profilling->answer;
 				$detils->competencies = $profilling->competencies;
@@ -75,33 +78,9 @@ class ActionRepository implements ActionRepositoryInterface{
 			}
 		}
 
-		$query = "
-			SELECT
-				prof_competencies.competencies AS competencies,
-				count
-			FROM(
-				SELECT 
-					competencies,
-					count(competencies) as count
-				FROM
-					prof_transaction_detils ptd
-				WHERE
-					transaction = ^idOfTransaction^
-				GROUP BY
-					competencies
-			) trs
-			LEFT JOIN
-				prof_competencies on trs.competencies = prof_competencies.id
-			ORDER BY count DESC
-		";
-		$query = str_replace(['^idOfTransaction^'], [$head->id], $query);
-		$getCompetenciesResault = DB::select(DB::raw($query));
-
-		$head->competencies = $getCompetenciesResault[0]->competencies;
-		$head->result = json_encode([
-			'competencies' => $getCompetenciesResault
-		]);
-		$head->save();
+		Artisan::call('transProf:generateResault', [
+            '--transaction' => $head->id
+        ]);
 
 		return [
 			"Success" => true,
@@ -1209,14 +1188,13 @@ class ActionRepository implements ActionRepositoryInterface{
 		private function transactionView($data){
 			$var = [];
 			$var['head'] = Transaction::find($data['input']['id']);
-			$var['competencies'] = json_decode($var['head']->result, true);
-			$var['competencies'] = $var['competencies']['competencies'];
+			$var['result'] = json_decode($var['head']->result, true);
 			$var['detl'] = TransactionDetils::where('transaction',$data['input']['id'])->get();
 			$type = $data['input']['data']['acckey'];
 			$action = $data['input']['data']['action'];
 			$acckey = $data['input']['data']['acckey'];
 			$access = json_decode(base64_decode($data['input']['data']['access']),true);
-			if (Auth::guard('user')->user()->roll_id != 2 and array_key_exists($data['input']['data']['acckey'],$access) and $access[$data['input']['data']['acckey']]['revision/finalise'] == true and $var['head']->status == 'Pending'){
+			if (Auth::guard('user')->user()->roll_id != 2 and array_key_exists($data['input']['data']['acckey'],$access) and $access[$data['input']['data']['acckey']]['revision/finalise'] == true){
 				$action = 'revision/finalise';
 			}
 			$title = 'View '.$type;
@@ -1227,25 +1205,65 @@ class ActionRepository implements ActionRepositoryInterface{
 
 		private function transactionStore($data){
 			$storeData = $this->convert_to_akv($data['input']['data']['storeData']);
-			if ($storeData['rf'] == 'revision' and empty($storeData['note'])) {
+			$max_revision = [];
+			$value_revision = [];
+			foreach ($storeData as $key => $value) {
+				$keyCheck = explode('.',$key);
+				if ($keyCheck[0] == 'max_revision') { $max_revision[$keyCheck[1]] = $value; }
+				if ($keyCheck[0] == 'value_revision') { 
+					$value_revision[$keyCheck[1]][$keyCheck[2]] = $value; 
+				}
+			}
+			foreach ($value_revision as $key => $value) {
+				$countVal = 0;
+				foreach ($value as $keySc => $valueSc) {
+					$countVal += $valueSc;
+				}
+				if ($countVal > $max_revision[$key]) {
+					return [
+						"responseType" => "notif",
+						"info" => "Jumlah nilai revisi pada criteria : ".$key." melebihi jumlah soal yang ada. Jumlah soal yang ada : ".$max_revision[$key]." jumlah revisi ".$countVal
+					];
+				}else if($countVal < $max_revision[$key]){
+					return [
+						"responseType" => "notif",
+						"info" => "Jumlah nilai revisi pada criteria : ".$key." kurang dari jumlah soal yang ada. Jumlah soal yang ada : ".$max_revision[$key]." jumlah revisi ".$countVal
+					];
+				}
+			}
+			if (empty($storeData['note'])) {
 				return [
-					"Success" => false,
-					"reloadForm" => false,
-					"reloadTable" => false,
-					"responseType" => "storeFormData",
+					"responseType" => "notif",
 					"info" => "Harap isi note terlebih dahulu!"
 				];
 			}
 			$store = Transaction::find($storeData['id']);
 			if ($store->status != 'Pending') {
 				return [
-					"Success" => false,
-					"reloadForm" => false,
-					"reloadTable" => false,
-					"responseType" => "storeFormData",
-					"info" => "Tidak bisa merubah data yang telah disimpan!"
+					"responseType" => "notif",
+					"info" => "Tidak bisa merubah data ini! Pastikan data ini berstatus Pending"
 				];
 			}
+			$newStoreResult = json_decode($store->result,true);
+			foreach ($newStoreResult as $key => $item) {
+				$highestCompetencies = 0;
+				foreach ($item['resault'] as $keySc => $res) {
+					$criteriaSlug = Str::slug($newStoreResult[$key]['criteria']['criteria'],'_');
+					$competenciesSlug = Str::slug($newStoreResult[$key]['resault'][$keySc]['competencies_name'],'_');
+					$max_question = $max_revision[$criteriaSlug];
+					$new_revision_resault = $value_revision[$criteriaSlug][$competenciesSlug];
+					if ($highestCompetencies < $new_revision_resault) { 
+						$highestCompetencies = $new_revision_resault;
+						$newStoreResult[$key]['criteria']['highest_competencies'] = $newStoreResult[$key]['resault'][$keySc]['competencies_name']; 
+					}
+					$newPercent = ($newStoreResult[$key]['resault'][$keySc]['real_resault']/$max_question)*100;
+					$newStoreResult[$key]['resault'][$keySc]['real_percen'] = $newPercent;
+					$newStoreResult[$key]['resault'][$keySc]['revision_resault'] = $new_revision_resault;
+					$newPercent = ($new_revision_resault/$max_question)*100;
+					$newStoreResult[$key]['resault'][$keySc]['revision_percen'] = $newPercent;
+				}
+			}
+			$store->result = json_encode($newStoreResult);
 			$store->status = Str::title($storeData['rf']);
 			$store->note = $storeData['note'];
 			$store->save();
@@ -1258,39 +1276,24 @@ class ActionRepository implements ActionRepositoryInterface{
 
 		private function transactionReport($data)
 		{
-			$resp = [];
 			$Transaction = Transaction::find($data['input']['id']);
-			$TransactionDetils = TransactionDetils::with('getCriteria','getCompetencies')->where([
-				'transaction' => $data['input']['id']
-			])->orderBy('id','asc')->get();
-			$resp['TH'] = $Transaction;
-			$resp['TD'] = $TransactionDetils;
-			$countCriteria = [];
-			$countCompetencies = [];
-			foreach ($TransactionDetils as $row) {
-				if (isset($countCriteria[$row->getCriteria->criteria])) { $countCriteria[$row->getCriteria->criteria] += 1; }
-				else{ $countCriteria[$row->getCriteria->criteria] = 1; }
-				if (isset($countCompetencies[$row->getCompetencies->competencies])) { $countCompetencies[$row->getCompetencies->competencies] += 1; }
-				else{ $countCompetencies[$row->getCompetencies->competencies] = 1; }
+			if ($Transaction->status != 'Finalise') {
+				return [
+					"responseType" => "notif",
+					"info" => "Data ini belum final"
+				];
 			}
-			$countCriteria = arsort($countCriteria);
-			$countCompetencies = arsort($countCompetencies);
-			$resp['countCriteria'] = $countCriteria;
-			$resp['countCompetencies'] = $countCompetencies;
-			
-			// $Criteria = Criteria::where('status','Y')->get();
-			// $resp['Criteria'] = [];
-			// foreach ($Criteria as $item) {
-			// 	$TransactionDetils = TransactionDetils::with('getQuestion','getAnswer','getCompetencies')->where([
-			// 		'transaction' => $data['input']['id'],
-			// 		'criteria' => $item->id
-			// 	])->orderBy('id','asc')->get();
-			// 	$resp['Criteria'][$item->id] = [
-			// 		'parent' => $item,
-			// 		'self' => $TransactionDetils
-			// 	];
-			// }
-			return $resp;
+			$Transaction->result = json_decode($Transaction->result);
+			$view = view('_main.transaction.report', compact('Transaction'))->render();
+			$nameFile = Str::slug($Transaction->name,'_').Carbon::now()->format('Ymd').'.xlsx';
+			return [
+				"Success" => true,
+				"responseType" => "generateExcelReport",
+				"config" => [
+					"name" => $nameFile,
+					"view" => base64_encode($view)
+				]
+			];
 		}
 	// transaction
 }

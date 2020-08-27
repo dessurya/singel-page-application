@@ -28,7 +28,7 @@ class SeederSetBaseData extends Seeder
         $this->Competencies();
         $this->Profilling();
         $this->UserData();
-        $this->transactionFeedData();
+        // $this->transactionFeedData();
     }
 
     public function MasterData()
@@ -187,103 +187,103 @@ class SeederSetBaseData extends Seeder
     {
         $stores = [
             ['criteria'=>1, 'question'=>1, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>1, 'answer'=>2, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>1, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>1, 'answer'=>4, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>1, 'answer'=>2, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>1, 'answer'=>3, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>1, 'answer'=>4, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>2, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>2, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>2, 'answer'=>7, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>2, 'answer'=>8, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>2, 'answer'=>6, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>2, 'answer'=>7, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>2, 'answer'=>8, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>3, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>3, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>3, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>3, 'answer'=>12, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>3, 'answer'=>10, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>3, 'answer'=>11, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>3, 'answer'=>12, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>4, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>4, 'answer'=>14, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>4, 'answer'=>15, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>4, 'answer'=>16, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>4, 'answer'=>14, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>4, 'answer'=>15, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>4, 'answer'=>16, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>5, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>5, 'answer'=>18, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>5, 'answer'=>19, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>5, 'answer'=>20, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>5, 'answer'=>18, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>5, 'answer'=>19, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>5, 'answer'=>20, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>6, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>6, 'answer'=>2, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>6, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>6, 'answer'=>4, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>6, 'answer'=>2, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>6, 'answer'=>3, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>6, 'answer'=>4, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>7, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>7, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>7, 'answer'=>7, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>7, 'answer'=>8, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>7, 'answer'=>6, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>7, 'answer'=>7, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>7, 'answer'=>8, 'competencies'=>4],
 
             ['criteria'=>1, 'question'=>8, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>8, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>8, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>8, 'answer'=>12, 'competencies'=>4],
+            ['criteria'=>1, 'question'=>8, 'answer'=>10, 'competencies'=>2],
+            ['criteria'=>1, 'question'=>8, 'answer'=>11, 'competencies'=>3],
+            ['criteria'=>1, 'question'=>8, 'answer'=>12, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>9, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>9, 'answer'=>14, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>9, 'answer'=>15, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>9, 'answer'=>16, 'competencies'=>4],
+            ['criteria'=>2, 'question'=>9, 'answer'=>13, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>9, 'answer'=>14, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>9, 'answer'=>15, 'competencies'=>2],
+            ['criteria'=>2, 'question'=>9, 'answer'=>16, 'competencies'=>2],
 
-            ['criteria'=>1, 'question'=>10, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>10, 'answer'=>18, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>10, 'answer'=>19, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>10, 'answer'=>20, 'competencies'=>4],
+            ['criteria'=>2, 'question'=>10, 'answer'=>17, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>10, 'answer'=>18, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>10, 'answer'=>19, 'competencies'=>2],
+            ['criteria'=>2, 'question'=>10, 'answer'=>20, 'competencies'=>2],
 
-            ['criteria'=>1, 'question'=>11, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>11, 'answer'=>2, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>11, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>11, 'answer'=>4, 'competencies'=>4],
+            ['criteria'=>2, 'question'=>11, 'answer'=>1, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>11, 'answer'=>2, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>11, 'answer'=>3, 'competencies'=>2],
+            ['criteria'=>2, 'question'=>11, 'answer'=>4, 'competencies'=>2],
 
-            ['criteria'=>1, 'question'=>12, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>12, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>12, 'answer'=>7, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>12, 'answer'=>8, 'competencies'=>4],
+            ['criteria'=>2, 'question'=>12, 'answer'=>5, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>12, 'answer'=>6, 'competencies'=>1],
+            ['criteria'=>2, 'question'=>12, 'answer'=>7, 'competencies'=>2],
+            ['criteria'=>2, 'question'=>12, 'answer'=>8, 'competencies'=>2],
 
-            ['criteria'=>1, 'question'=>13, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>13, 'answer'=>10, 'competencies'=>2],
+            ['criteria'=>3, 'question'=>13, 'answer'=>9, 'competencies'=>1],
+            ['criteria'=>3, 'question'=>13, 'answer'=>10, 'competencies'=>2],
             ['criteria'=>3, 'question'=>13, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>13, 'answer'=>12, 'competencies'=>4],
+            ['criteria'=>3, 'question'=>13, 'answer'=>12, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>14, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>14, 'answer'=>14, 'competencies'=>2],
+            ['criteria'=>3, 'question'=>14, 'answer'=>13, 'competencies'=>1],
+            ['criteria'=>3, 'question'=>14, 'answer'=>14, 'competencies'=>2],
             ['criteria'=>3, 'question'=>14, 'answer'=>15, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>14, 'answer'=>16, 'competencies'=>4],
+            ['criteria'=>3, 'question'=>14, 'answer'=>16, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>15, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>15, 'answer'=>18, 'competencies'=>2],
+            ['criteria'=>3, 'question'=>15, 'answer'=>17, 'competencies'=>1],
+            ['criteria'=>3, 'question'=>15, 'answer'=>18, 'competencies'=>2],
             ['criteria'=>3, 'question'=>15, 'answer'=>19, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>15, 'answer'=>20, 'competencies'=>4],
+            ['criteria'=>3, 'question'=>15, 'answer'=>20, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>16, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>16, 'answer'=>2, 'competencies'=>2],
+            ['criteria'=>3, 'question'=>16, 'answer'=>1, 'competencies'=>1],
+            ['criteria'=>3, 'question'=>16, 'answer'=>2, 'competencies'=>2],
             ['criteria'=>3, 'question'=>16, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>16, 'answer'=>4, 'competencies'=>4],
+            ['criteria'=>3, 'question'=>16, 'answer'=>4, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>17, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>17, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>17, 'answer'=>7, 'competencies'=>3],
+            ['criteria'=>4, 'question'=>17, 'answer'=>5, 'competencies'=>1],
+            ['criteria'=>4, 'question'=>17, 'answer'=>6, 'competencies'=>2],
+            ['criteria'=>4, 'question'=>17, 'answer'=>7, 'competencies'=>3],
             ['criteria'=>4, 'question'=>17, 'answer'=>8, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>18, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>18, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>18, 'answer'=>11, 'competencies'=>3],
+            ['criteria'=>4, 'question'=>18, 'answer'=>9, 'competencies'=>1],
+            ['criteria'=>4, 'question'=>18, 'answer'=>10, 'competencies'=>2],
+            ['criteria'=>4, 'question'=>18, 'answer'=>11, 'competencies'=>3],
             ['criteria'=>4, 'question'=>18, 'answer'=>12, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>19, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>19, 'answer'=>14, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>19, 'answer'=>15, 'competencies'=>3],
+            ['criteria'=>4, 'question'=>19, 'answer'=>13, 'competencies'=>1],
+            ['criteria'=>4, 'question'=>19, 'answer'=>14, 'competencies'=>2],
+            ['criteria'=>4, 'question'=>19, 'answer'=>15, 'competencies'=>3],
             ['criteria'=>4, 'question'=>19, 'answer'=>16, 'competencies'=>4],
 
-            ['criteria'=>1, 'question'=>20, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>20, 'answer'=>18, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>20, 'answer'=>19, 'competencies'=>3],
+            ['criteria'=>4, 'question'=>20, 'answer'=>17, 'competencies'=>1],
+            ['criteria'=>4, 'question'=>20, 'answer'=>18, 'competencies'=>2],
+            ['criteria'=>4, 'question'=>20, 'answer'=>19, 'competencies'=>3],
             ['criteria'=>4, 'question'=>20, 'answer'=>20, 'competencies'=>4],
         ];
         foreach ($stores as $store) {
@@ -360,6 +360,28 @@ class SeederSetBaseData extends Seeder
                 ['profilling'=>74,'question'=>19,'answer'=>14,'criteria'=>2,'competencies'=>2],
                 ['profilling'=>78,'question'=>20,'answer'=>18,'criteria'=>2,'competencies'=>2],
             ],
+            'user004@mail.mail' => [
+                ['profilling'=>1,'question'=>1,'answer'=>1,'criteria'=>1,'competencies'=>1],
+                ['profilling'=>5,'question'=>2,'answer'=>5,'criteria'=>1,'competencies'=>1],
+                ['profilling'=>10,'question'=>3,'answer'=>10,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>14,'question'=>4,'answer'=>14,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>18,'question'=>5,'answer'=>18,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>22,'question'=>6,'answer'=>2,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>26,'question'=>7,'answer'=>6,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>30,'question'=>8,'answer'=>10,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>34,'question'=>9,'answer'=>14,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>38,'question'=>10,'answer'=>18,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>42,'question'=>11,'answer'=>2,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>46,'question'=>12,'answer'=>6,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>50,'question'=>13,'answer'=>10,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>54,'question'=>14,'answer'=>14,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>58,'question'=>15,'answer'=>18,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>62,'question'=>16,'answer'=>2,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>66,'question'=>17,'answer'=>6,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>70,'question'=>18,'answer'=>10,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>74,'question'=>19,'answer'=>14,'criteria'=>2,'competencies'=>2],
+                ['profilling'=>78,'question'=>20,'answer'=>18,'criteria'=>2,'competencies'=>2],
+            ],
             'user001@mail.mail.comp' => [
                 'single' => 'competencies_1',
                 'encode' => [
@@ -384,10 +406,19 @@ class SeederSetBaseData extends Seeder
                         ['competencies' => 'competencies_2', 'count'=>6]
                     ]
                 ]
+            ],
+            'user004@mail.mail.comp' => [
+                'single' => 'competencies_2',
+                'encode' => [
+                    'competencies' => [
+                        ['competencies' => 'competencies_2', 'count'=>18],
+                        ['competencies' => 'competencies_1', 'count'=>2]
+                    ]
+                ]
             ]
         ];
         $Users = User::with('getUserDetils')
-        ->whereIn('email',['user001@mail.mail','user002@mail.mail','user003@mail.mail'])
+        ->whereIn('email',['user001@mail.mail','user002@mail.mail','user003@mail.mail','user004@mail.mail'])
         ->get();
         foreach ($Users as $User) {
             $storeH = new Transaction;
