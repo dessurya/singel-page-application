@@ -50,7 +50,7 @@
             @endif
 
             <form action="{{ route('auth.login') }}" method="POST">
-              {{ csrf_field() }}
+              @csrf
               <center><img src="{{ asset('images/Profilling_Logo.jpg') }}" height="80px;"></center>
               <!-- <h1>Login Form</h1> -->
               <div>

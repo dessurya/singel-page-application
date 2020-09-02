@@ -1276,7 +1276,7 @@ class ActionRepository implements ActionRepositoryInterface{
 
 		private function transactionReport($data)
 		{
-			$Transaction = Transaction::find($data['input']['id']);
+			$Transaction = Transaction::with('getUser.getUserDetils')->find($data['input']['id']);
 			if ($Transaction->status != 'Finalise') {
 				return [
 					"responseType" => "notif",
@@ -1286,12 +1286,73 @@ class ActionRepository implements ActionRepositoryInterface{
 			$Transaction->result = json_decode($Transaction->result);
 			$view = view('_main.transaction.report', compact('Transaction'))->render();
 			$nameFile = Str::slug($Transaction->name,'_').Carbon::now()->format('Ymd');
+			$encodeImg = base64_encode(file_get_contents(url("images/Profilling_Logo.jpg")));
+			$pdfConfig = [
+				[
+					'image'=>'data:image/jpeg;base64,'.$encodeImg,
+					'fit'=> [250, 250]
+				],
+				[
+					'table' => [
+						'widths' => ['auto', '*'],
+						'body' => [
+							['Name', $Transaction->getUser->name],
+							['Email', $Transaction->getUser->email],
+							['Tgl Lahir', $Transaction->getUser->getUserDetils->date_of_birth],
+							['Perusahaan', $Transaction->getUser->getUserDetils->current_companies],
+							['Group/Jabatan', $Transaction->getUser->getUserDetils->work_title],
+							['Tgl Asessment', (new Carbon($Transaction->created_at))->format('d-M-Y')],
+						]
+					]
+				]
+			];
+			foreach ($Transaction->result as $idx => $data) {
+				$criteria = Criteria::find($data->criteria->id);
+				$pdfConfig[] = 'Criteria : '.$criteria->criteria.' your dominant competencies is '.$data->criteria->highest_competencies;
+				if ($criteria->description == 'criteria_description_1') {
+					$pdfConfig[] = [
+						'table' => [
+							'widths' => ['*','*'],
+							'body' => [
+								[
+									['text'=>$data->resault[0]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'green'],
+									['text'=>$data->resault[1]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'red'],
+								],
+								[
+									['text'=>'Real :'.$data->resault[0]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'green'],
+									['text'=>'Real :'.$data->resault[1]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'red'],
+								],
+								[
+									['text'=>'Revision :'.$data->resault[0]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'green'],
+									['text'=>'Revision :'.$data->resault[1]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'red'],
+								],
+								[
+									['text'=>$data->resault[2]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'yellow'],
+									['text'=>$data->resault[3]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'blue'],
+								],
+								[
+									['text'=>'Real :'.$data->resault[2]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'yellow'],
+									['text'=>'Real :'.$data->resault[3]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'blue'],
+								],
+								[
+									['text'=>'Revision :'.$data->resault[2]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'yellow'],
+									['text'=>'Revision :'.$data->resault[3]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'blue'],
+								]
+							]
+						]
+					];
+				}
+			}
 			return [
 				"Success" => true,
-				"responseType" => "generateExcelReport",
-				"config" => [
+				"responseType" => "generateReport",
+				"generateExcel" => [
 					"name" => $nameFile,
 					"view" => base64_encode($view)
+				],
+				"generatePDF" => [
+					"name" => $nameFile,
+					"render" => $pdfConfig
 				]
 			];
 		}

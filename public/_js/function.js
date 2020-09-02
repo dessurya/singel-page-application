@@ -16,7 +16,7 @@ function indexOfSearch(data) {
     var configDtTab = JSON.parse(atob(data.config));
     var confDtTable = {};
     confDtTable['reBuild'] = false;
-    confDtTable['ajaxUrl'] = urlTabList+configDtTab.table.url;
+    confDtTable['ajaxUrl'] = urlTabList + configDtTab.table.url;
     confDtTable['fieldSort'] = configDtTab.table.sortBy;
     confDtTable['ConfigColumns'] = configDtTab.table.config;
     confDtTable['dataTabOfId'] = data.dataTabOfId;
@@ -27,7 +27,7 @@ function indexOfSearch(data) {
 
 function indexOfSearchResponse(data) {
     $.each(data.fillInput, function(key, row) {
-        $('#form form#storeDataProfilling '+row.key).val(row.val);
+        $('#form form#storeDataProfilling ' + row.key).val(row.val);
     });
     return true;
 }
@@ -53,7 +53,7 @@ function takeProfilling(data) {
     $("#form").html(atob(data.callForm));
     sessionStorage.setItem("questionRender", JSON.stringify(data.question));
     $.each(data.question, function(i, item) {
-        var renderHTML = '<div id="pageOfQuestion'+i+'" class="pageOfQuestion">'+atob(item)+'</div>';
+        var renderHTML = '<div id="pageOfQuestion' + i + '" class="pageOfQuestion">' + atob(item) + '</div>';
         $("form#storeData .x_content #question").append(renderHTML);
         sessionStorage.setItem("questionPageCount", parseInt(i));
     });
@@ -66,8 +66,8 @@ function takeProfilling(data) {
 
 function pageOfQuestionShow(page) {
     $("form#storeData .x_content #question .pageOfQuestion").hide();
-    $("form#storeData .x_content #question #pageOfQuestion"+page).show();
-    $("form#storeData .x_content #page label strong").html(page+1);
+    $("form#storeData .x_content #question #pageOfQuestion" + page).show();
+    $("form#storeData .x_content #page label strong").html(page + 1);
 }
 
 function storeFormData(data) {
@@ -76,15 +76,15 @@ function storeFormData(data) {
     // pndata['type'] = 'Warning';
     // pndata['text'] = data.info;
     // pnotify(pndata); 
-    if(data.reloadForm === undefined){
+    if (data.reloadForm === undefined) {
         $("#form").html('');
     }
-    if(data.reloadTable === undefined){
+    if (data.reloadTable === undefined) {
         reloadDataTabless();
     }
 }
 
-function postData(data,url) {
+function postData(data, url) {
     $.ajaxSetup({ headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') } });
     $.ajax({
         url: url,
@@ -101,25 +101,34 @@ function postData(data,url) {
     });
 }
 
-function responsePostData(data){
-    if (data.responseType == 'setMenuOnSeasion') { setMenuOnSeasion(data); }
-    else if (data.responseType == 'bodyAccess') { bodyAccess(data); }
-    else if (data.responseType == 'callForm') { callForm(data); }
-    else if (data.responseType == 'storeFormData') { storeFormData(data); }
-    else if (data.responseType == 'change_password') { change_password(data); }
-    else if (data.responseType == 'selfUpdate') { selfUpdate(data); }
-    else if (data.responseType == 'takeProfilling') { takeProfilling(data); }
-    else if (data.responseType == 'indexOfSearch') { indexOfSearch(data); }
-    else if (data.responseType == 'indexOfSearchResponse') { indexOfSearchResponse(data); }
-    else if (data.responseType == 'generateExcelReport') { generateExcelReport(data); }
-    else if (data.responseType == 'notif') {
+function responsePostData(data) {
+    if (data.responseType == 'setMenuOnSeasion') {
+        setMenuOnSeasion(data);
+    } else if (data.responseType == 'bodyAccess') {
+        bodyAccess(data);
+    } else if (data.responseType == 'callForm') {
+        callForm(data);
+    } else if (data.responseType == 'storeFormData') {
+        storeFormData(data);
+    } else if (data.responseType == 'change_password') {
+        change_password(data);
+    } else if (data.responseType == 'selfUpdate') {
+        selfUpdate(data);
+    } else if (data.responseType == 'takeProfilling') {
+        takeProfilling(data);
+    } else if (data.responseType == 'indexOfSearch') {
+        indexOfSearch(data);
+    } else if (data.responseType == 'indexOfSearchResponse') {
+        indexOfSearchResponse(data);
+    } else if (data.responseType == 'generateReport') {
+        generateReport(data);
+    } else if (data.responseType == 'notif') {
         var pndata = {};
         pndata['title'] = 'Info';
         pndata['type'] = 'Warning';
         pndata['text'] = data.info;
         pnotify(pndata);
-    }
-    else if (data.responseType == 'refresh') {
+    } else if (data.responseType == 'refresh') {
         var pndata = {};
         pndata['title'] = 'Info';
         pndata['type'] = 'Warning';
@@ -128,16 +137,28 @@ function responsePostData(data){
         window.setTimeout(function() {
             location.reload();
         }, 1550);
-    }else if (data.responseType == 'appendTo') {
+    } else if (data.responseType == 'appendTo') {
         $(data.target).append(atob(data.content));
     }
 }
 
-function generateExcelReport(data) {
+function generateReport(data) {
+    generateExcel(data.generateExcel);
+    generatePDF(data.generatePDF);
+}
+
+function generateExcel(data) {
     var link = document.createElement('a');
-    link.download = data.config.name;
-    link.href = 'data:application/vnd.ms-excel;base64,' + $.base64.encode(atob(data.config.view));
+    link.download = data.name;
+    link.href = 'data:application/vnd.ms-excel;base64,' + $.base64.encode(atob(data.view));
     link.click();
+}
+
+function generatePDF(config) {
+    var docDefinition = {
+        content: config.render
+    };
+    pdfMake.createPdf(docDefinition).download(config.name + '.pdf');
 }
 
 function bodyAccess(data) {
@@ -146,7 +167,7 @@ function bodyAccess(data) {
     var configDtTab = JSON.parse(atob(data.config));
     var confDtTable = {};
     confDtTable['reBuild'] = false;
-    confDtTable['ajaxUrl'] = urlTabList+configDtTab.table.url;
+    confDtTable['ajaxUrl'] = urlTabList + configDtTab.table.url;
     confDtTable['fieldSort'] = configDtTab.table.sortBy;
     confDtTable['ConfigColumns'] = configDtTab.table.config;
     confDtTable['dataPost'] = {};
@@ -157,11 +178,11 @@ function bodyAccess(data) {
 
 function callDataTabless(setConf) {
 
-    if(setConf.reBuild == true){
+    if (setConf.reBuild == true) {
         datatable.destroy();
     }
 
-    $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings){
+    $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings) {
         return {
             "iStart": oSettings._iDisplayStart,
             "iEnd": oSettings.fnDisplayEnd(),
@@ -173,7 +194,7 @@ function callDataTabless(setConf) {
         };
     };
 
-    if(setConf.dataTabOfId === undefined){
+    if (setConf.dataTabOfId === undefined) {
         var dataTabOfId = '#table-data';
         datatable = $(dataTabOfId).DataTable({
             processing: true,
@@ -183,21 +204,21 @@ function callDataTabless(setConf) {
                 type: "POST",
                 data: setConf.dataPost
             },
-            aDataSort: [ setConf.fieldSort ],
+            aDataSort: [setConf.fieldSort],
             columns: setConf.ConfigColumns,
-            initComplete: function () {
+            initComplete: function() {
                 var api = this.api();
-                api.columns().every(function () {
+                api.columns().every(function() {
                     var column = this;
                     if ($(column.footer()).hasClass('search')) {
-                        var input = $('<input type="text" class="search form-control input-sm" placeholder="Search '+$(column.footer()).text()+'" />');
-                        input.appendTo( $(column.footer()).empty() ).on('change', function (keypress) {
+                        var input = $('<input type="text" class="search form-control input-sm" placeholder="Search ' + $(column.footer()).text() + '" />');
+                        input.appendTo($(column.footer()).empty()).on('change', function(keypress) {
                             if (column.search() !== this.value) {
-                                        // var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                        var val = this.value;
-                                        column.search(val ? val : '', true, false).draw();
-                                    }
-                                });
+                                // var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                var val = this.value;
+                                column.search(val ? val : '', true, false).draw();
+                            }
+                        });
                     }
                 });
             },
@@ -205,7 +226,7 @@ function callDataTabless(setConf) {
                 $(row).attr('id', data.id);
             }
         });
-    }else{
+    } else {
         var dataTabOfId = '#table-data1';
         datatableSerach = $(dataTabOfId).DataTable({
             processing: true,
@@ -215,21 +236,21 @@ function callDataTabless(setConf) {
                 type: "POST",
                 data: setConf.dataPost
             },
-            aDataSort: [ setConf.fieldSort ],
+            aDataSort: [setConf.fieldSort],
             columns: setConf.ConfigColumns,
-            initComplete: function () {
+            initComplete: function() {
                 var api = this.api();
-                api.columns().every(function () {
+                api.columns().every(function() {
                     var column = this;
                     if ($(column.footer()).hasClass('search')) {
-                        var input = $('<input type="text" class="search form-control input-sm" placeholder="Search '+$(column.footer()).text()+'" />');
-                        input.appendTo( $(column.footer()).empty() ).on('change', function (keypress) {
+                        var input = $('<input type="text" class="search form-control input-sm" placeholder="Search ' + $(column.footer()).text() + '" />');
+                        input.appendTo($(column.footer()).empty()).on('change', function(keypress) {
                             if (column.search() !== this.value) {
-                                        // var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                        var val = this.value;
-                                        column.search(val ? val : '', true, false).draw();
-                                    }
-                                });
+                                // var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                var val = this.value;
+                                column.search(val ? val : '', true, false).draw();
+                            }
+                        });
                     }
                 });
             },
@@ -241,41 +262,40 @@ function callDataTabless(setConf) {
 }
 
 function reloadDataTabless() {
-    var confDtTable =JSON.parse(sessionStorage.getItem("confDtTable"));
+    var confDtTable = JSON.parse(sessionStorage.getItem("confDtTable"));
     confDtTable['reBuild'] = true;
-    if($('#table-data').length){
+    if ($('#table-data').length) {
         callDataTabless(confDtTable);
     }
 }
 
 function actionToolsExcute(data) {
-    if(data.action == 'template'){ window.open(data.template, '_blank'); return false; }
-    else if(data.action == 'upload'){ 
+    if (data.action == 'template') { window.open(data.template, '_blank'); return false; } else if (data.action == 'upload') {
         sessionStorage.setItem('importBase64', null);
-        sessionStorage.setItem('importConfig', JSON.stringify(data)); 
-        $('input[type=file]').focus().trigger('click'); 
-        return false; 
+        sessionStorage.setItem('importConfig', JSON.stringify(data));
+        $('input[type=file]').focus().trigger('click');
+        return false;
     }
-    var id = getDataId({'select' : data.select, 'multiple' : data.multiple}, false);
-    if(id == false){ return false; }
+    var id = getDataId({ 'select': data.select, 'multiple': data.multiple }, false);
+    if (id == false) { return false; }
     var val = {};
-    if(data.conf == true){
+    if (data.conf == true) {
         data['id'] = id;
         val['title'] = 'Warning';
         val['type'] = 'info';
-        val['text'] = 'Are You Sure Do '+data.action+' On Selected Data?';
+        val['text'] = 'Are You Sure Do ' + data.action + ' On Selected Data?';
         val['input'] = {};
         val['input']['url'] = urlAction;
         val['input']['data'] = {};
         val['input']['data'] = data;
         pnotifyConfirm(val);
-    }else if(data.conf == false){
+    } else if (data.conf == false) {
         val['url'] = urlAction;
         val['pcndt'] = true;
         val['input'] = {};
         val['input']['id'] = id;
         val['input']['data'] = data;
-        postData(val,urlAction);
+        postData(val, urlAction);
     }
     // return false;
 }
@@ -295,28 +315,28 @@ function importExcute() {
     $('input.import').val(null);
 }
 
-function getDataId(data, target){
-    if(data.select == false){ return true; }
+function getDataId(data, target) {
+    if (data.select == false) { return true; }
     var idData = "";
-    if(target == false){
-        $('table#table-data tbody tr.selected').each(function(){
-            idData += $(this).attr('id')+'^';
+    if (target == false) {
+        $('table#table-data tbody tr.selected').each(function() {
+            idData += $(this).attr('id') + '^';
         });
-    }else{
-        $('table#table-data1 tbody tr.selected').each(function(){
-            idData += $(this).attr('id')+'^';
+    } else {
+        $('table#table-data1 tbody tr.selected').each(function() {
+            idData += $(this).attr('id') + '^';
         });
     }
-    var getLength = idData.length-1;
+    var getLength = idData.length - 1;
     idData = idData.substr(0, getLength);
     var pndata = {};
-    if((idData === null || idData === '' || idData === undefined) && target == false){
+    if ((idData === null || idData === '' || idData === undefined) && target == false) {
         pndata['title'] = 'Info';
         pndata['type'] = 'error';
         pndata['text'] = 'No Data Selected!';
         pnotify(pndata);
         return false;
-    }else if( data.multiple == false && idData.indexOf('^') > -1){
+    } else if (data.multiple == false && idData.indexOf('^') > -1) {
         pndata['title'] = 'Info';
         pndata['type'] = 'error';
         pndata['text'] = 'You only can selected one data!';
@@ -337,11 +357,11 @@ function pnotify(data) {
 
 function pnotifyConfirm(data) {
     new PNotify({
-        after_open: function(ui){
+        after_open: function(ui) {
             $(".true", ui.container).focus();
             $('#loading-page').show();
         },
-        after_close: function(){
+        after_close: function() {
             $('#loading-page').hide();
         },
         title: data.title,
@@ -350,36 +370,36 @@ function pnotifyConfirm(data) {
         delay: 3000,
         confirm: {
             confirm: true,
-            buttons:[
-            { text: 'Yes', addClass: 'true btn-primary', removeClass: 'btn-default'},
-            { text: 'No', addClass: 'false'}
+            buttons: [
+                { text: 'Yes', addClass: 'true btn-primary', removeClass: 'btn-default' },
+                { text: 'No', addClass: 'false' }
             ]
         }
-    }).get().on('pnotify.confirm', function(){
-        postData(data,urlAction);
+    }).get().on('pnotify.confirm', function() {
+        postData(data, urlAction);
     });
 }
 
 function questionHiddenCheck(elem) {
     var count = 0;
     var elemEach = 'form#storeData .x_content .questionHiddenCheck';
-    if(elem != null){ 
+    if (elem != null) {
         elem = parseInt(elem);
-        elemEach = 'form#storeData .x_content #pageOfQuestion'+elem+' .questionHiddenCheck'; 
+        elemEach = 'form#storeData .x_content #pageOfQuestion' + elem + ' .questionHiddenCheck';
     }
-    $(elemEach).each(function(){
+    $(elemEach).each(function() {
         var checked = false;
         var inputName = $(this).val();
         var qn = $(this).data('qn');
-        if($('form#storeData .x_content input[name='+inputName+']').is(':checked')) { checked = true; }
-        
-        if(checked == false){
+        if ($('form#storeData .x_content input[name=' + inputName + ']').is(':checked')) { checked = true; }
+
+        if (checked == false) {
             var pndata = {};
             pndata['title'] = 'Info';
             pndata['type'] = 'Warning';
-            pndata['text'] = 'Please... answer question '+qn;
+            pndata['text'] = 'Please... answer question ' + qn;
             pnotify(pndata);
-            count = count+1;
+            count = count + 1;
         }
     });
     return count;
