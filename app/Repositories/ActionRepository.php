@@ -1006,6 +1006,7 @@ class ActionRepository implements ActionRepositoryInterface{
 				$store = Competencies::find($storeData['id']);
 			}
 			$store->competencies = $storeData['competencies'];
+			$store->description = $storeData['description'];
 			$store->save();
 			return [
 				"Success" => true,

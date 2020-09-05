@@ -35,7 +35,7 @@
 							readonly 
 							@endif
 							name="flag" 
-							type="text"
+							type="number"
 							value="{{ !empty($var) ? $var['flag'] : '' }}" 
 							class="form-control">
 					</div>
@@ -50,6 +50,7 @@
 							@endif
 							name="description" 
 							type="text"
+							rows="5"
 							class="form-control">{{ !empty($var) ? $var['description'] : '' }}</textarea>
 					</div>
 				</div>

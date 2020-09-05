@@ -25,6 +25,20 @@
 							class="form-control">
 					</div>
 				</div>
+				<div class="col-sm-12">
+					<div class="form-group">
+						Description <span class="description error"></span>
+						<textarea 
+							@if(in_array($action,['add','edit']))
+							@elseif($action=='view')
+							readonly 
+							@endif
+							name="description" 
+							type="text"
+							rows="5"
+							class="form-control">{{ !empty($var) ? $var['description'] : '' }}</textarea>
+					</div>
+				</div>
 			</div>
 			@if(in_array($action,['add','edit']))
 			<div style="float: right;">
