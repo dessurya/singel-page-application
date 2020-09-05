@@ -102,10 +102,10 @@ class SeederSetBaseData extends Seeder
     public function Criteria()
     {
         $stores = [
-            ['criteria'=>'criteria_1', 'description'=>'criteria_description_1'],
-            ['criteria'=>'criteria_2', 'description'=>'criteria_description_2'],
-            ['criteria'=>'criteria_3', 'description'=>'criteria_description_3'],
-            ['criteria'=>'criteria_4', 'description'=>'criteria_description_4']
+            ['criteria'=>'criteria_1', 'flag'=> 1, 'description'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['criteria'=>'criteria_2', 'flag'=> 2, 'description'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['criteria'=>'criteria_3', 'flag'=> 2, 'description'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['criteria'=>'criteria_4', 'flag'=> 2, 'description'=>'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.']
         ];
         foreach ($stores as $store) {
             Criteria::create($store);
@@ -173,10 +173,20 @@ class SeederSetBaseData extends Seeder
     public function Competencies()
     {
         $stores = [
-            ['competencies'=>'competencies_1'],
-            ['competencies'=>'competencies_2'],
-            ['competencies'=>'competencies_3'],
-            ['competencies'=>'competencies_4']
+            ['competencies'=>'criteria_1 competencies_1', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_1 competencies_2', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_1 competencies_3', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_1 competencies_4', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_2 competencies_1', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_2 competencies_2', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_3 competencies_1', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_3 competencies_2', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_3 competencies_3', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_3 competencies_4', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_4 competencies_1', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_4 competencies_2', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_4 competencies_3', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
+            ['competencies'=>'criteria_4 competencies_4', 'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'],
         ];
         foreach ($stores as $store) {
             Competencies::create($store);
@@ -185,107 +195,107 @@ class SeederSetBaseData extends Seeder
 
     public function Profilling()
     {
-        $stores = [
-            ['criteria'=>1, 'question'=>1, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>1, 'answer'=>2, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>1, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>1, 'answer'=>4, 'competencies'=>4],
+        $stores = [];
+        $stores[] = ['criteria'=>1, 'question'=>1, 'answer'=>1, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>1, 'answer'=>2, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>1, 'answer'=>3, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>1, 'answer'=>4, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>2, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>2, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>2, 'answer'=>7, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>2, 'answer'=>8, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>2, 'answer'=>5, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>2, 'answer'=>6, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>2, 'answer'=>7, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>2, 'answer'=>8, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>3, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>3, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>3, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>3, 'answer'=>12, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>3, 'answer'=>9, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>3, 'answer'=>10, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>3, 'answer'=>11, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>3, 'answer'=>12, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>4, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>4, 'answer'=>14, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>4, 'answer'=>15, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>4, 'answer'=>16, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>4, 'answer'=>13, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>4, 'answer'=>14, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>4, 'answer'=>15, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>4, 'answer'=>16, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>5, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>5, 'answer'=>18, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>5, 'answer'=>19, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>5, 'answer'=>20, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>5, 'answer'=>17, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>5, 'answer'=>18, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>5, 'answer'=>19, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>5, 'answer'=>20, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>6, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>6, 'answer'=>2, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>6, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>6, 'answer'=>4, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>6, 'answer'=>1, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>6, 'answer'=>2, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>6, 'answer'=>3, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>6, 'answer'=>4, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>7, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>7, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>7, 'answer'=>7, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>7, 'answer'=>8, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>7, 'answer'=>5, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>7, 'answer'=>6, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>7, 'answer'=>7, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>7, 'answer'=>8, 'competencies'=>4];
 
-            ['criteria'=>1, 'question'=>8, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>1, 'question'=>8, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>1, 'question'=>8, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>1, 'question'=>8, 'answer'=>12, 'competencies'=>4],
+        $stores[] = ['criteria'=>1, 'question'=>8, 'answer'=>9, 'competencies'=>1];
+        $stores[] = ['criteria'=>1, 'question'=>8, 'answer'=>10, 'competencies'=>2];
+        $stores[] = ['criteria'=>1, 'question'=>8, 'answer'=>11, 'competencies'=>3];
+        $stores[] = ['criteria'=>1, 'question'=>8, 'answer'=>12, 'competencies'=>4];
 
-            ['criteria'=>2, 'question'=>9, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>9, 'answer'=>14, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>9, 'answer'=>15, 'competencies'=>2],
-            ['criteria'=>2, 'question'=>9, 'answer'=>16, 'competencies'=>2],
+        $stores[] = ['criteria'=>2, 'question'=>9, 'answer'=>13, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>9, 'answer'=>14, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>9, 'answer'=>15, 'competencies'=>6];
+        $stores[] = ['criteria'=>2, 'question'=>9, 'answer'=>16, 'competencies'=>6];
 
-            ['criteria'=>2, 'question'=>10, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>10, 'answer'=>18, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>10, 'answer'=>19, 'competencies'=>2],
-            ['criteria'=>2, 'question'=>10, 'answer'=>20, 'competencies'=>2],
+        $stores[] = ['criteria'=>2, 'question'=>10, 'answer'=>17, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>10, 'answer'=>18, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>10, 'answer'=>19, 'competencies'=>6];
+        $stores[] = ['criteria'=>2, 'question'=>10, 'answer'=>20, 'competencies'=>6];
 
-            ['criteria'=>2, 'question'=>11, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>11, 'answer'=>2, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>11, 'answer'=>3, 'competencies'=>2],
-            ['criteria'=>2, 'question'=>11, 'answer'=>4, 'competencies'=>2],
+        $stores[] = ['criteria'=>2, 'question'=>11, 'answer'=>1, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>11, 'answer'=>2, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>11, 'answer'=>3, 'competencies'=>6];
+        $stores[] = ['criteria'=>2, 'question'=>11, 'answer'=>4, 'competencies'=>6];
 
-            ['criteria'=>2, 'question'=>12, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>12, 'answer'=>6, 'competencies'=>1],
-            ['criteria'=>2, 'question'=>12, 'answer'=>7, 'competencies'=>2],
-            ['criteria'=>2, 'question'=>12, 'answer'=>8, 'competencies'=>2],
+        $stores[] = ['criteria'=>2, 'question'=>12, 'answer'=>5, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>12, 'answer'=>6, 'competencies'=>5];
+        $stores[] = ['criteria'=>2, 'question'=>12, 'answer'=>7, 'competencies'=>6];
+        $stores[] = ['criteria'=>2, 'question'=>12, 'answer'=>8, 'competencies'=>6];
 
-            ['criteria'=>3, 'question'=>13, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>3, 'question'=>13, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>13, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>3, 'question'=>13, 'answer'=>12, 'competencies'=>4],
+        $stores[] = ['criteria'=>3, 'question'=>13, 'answer'=>9, 'competencies'=>7];
+        $stores[] = ['criteria'=>3, 'question'=>13, 'answer'=>10, 'competencies'=>8];
+        $stores[] = ['criteria'=>3, 'question'=>13, 'answer'=>11, 'competencies'=>9];
+        $stores[] = ['criteria'=>3, 'question'=>13, 'answer'=>12, 'competencies'=>10];
 
-            ['criteria'=>3, 'question'=>14, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>3, 'question'=>14, 'answer'=>14, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>14, 'answer'=>15, 'competencies'=>3],
-            ['criteria'=>3, 'question'=>14, 'answer'=>16, 'competencies'=>4],
+        $stores[] = ['criteria'=>3, 'question'=>14, 'answer'=>13, 'competencies'=>7];
+        $stores[] = ['criteria'=>3, 'question'=>14, 'answer'=>14, 'competencies'=>8];
+        $stores[] = ['criteria'=>3, 'question'=>14, 'answer'=>15, 'competencies'=>9];
+        $stores[] = ['criteria'=>3, 'question'=>14, 'answer'=>16, 'competencies'=>10];
 
-            ['criteria'=>3, 'question'=>15, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>3, 'question'=>15, 'answer'=>18, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>15, 'answer'=>19, 'competencies'=>3],
-            ['criteria'=>3, 'question'=>15, 'answer'=>20, 'competencies'=>4],
+        $stores[] = ['criteria'=>3, 'question'=>15, 'answer'=>17, 'competencies'=>7];
+        $stores[] = ['criteria'=>3, 'question'=>15, 'answer'=>18, 'competencies'=>8];
+        $stores[] = ['criteria'=>3, 'question'=>15, 'answer'=>19, 'competencies'=>9];
+        $stores[] = ['criteria'=>3, 'question'=>15, 'answer'=>20, 'competencies'=>10];
 
-            ['criteria'=>3, 'question'=>16, 'answer'=>1, 'competencies'=>1],
-            ['criteria'=>3, 'question'=>16, 'answer'=>2, 'competencies'=>2],
-            ['criteria'=>3, 'question'=>16, 'answer'=>3, 'competencies'=>3],
-            ['criteria'=>3, 'question'=>16, 'answer'=>4, 'competencies'=>4],
+        $stores[] = ['criteria'=>3, 'question'=>16, 'answer'=>1, 'competencies'=>7];
+        $stores[] = ['criteria'=>3, 'question'=>16, 'answer'=>2, 'competencies'=>8];
+        $stores[] = ['criteria'=>3, 'question'=>16, 'answer'=>3, 'competencies'=>9];
+        $stores[] = ['criteria'=>3, 'question'=>16, 'answer'=>4, 'competencies'=>10];
 
-            ['criteria'=>4, 'question'=>17, 'answer'=>5, 'competencies'=>1],
-            ['criteria'=>4, 'question'=>17, 'answer'=>6, 'competencies'=>2],
-            ['criteria'=>4, 'question'=>17, 'answer'=>7, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>17, 'answer'=>8, 'competencies'=>4],
+        $stores[] = ['criteria'=>4, 'question'=>17, 'answer'=>5, 'competencies'=>11];
+        $stores[] = ['criteria'=>4, 'question'=>17, 'answer'=>6, 'competencies'=>12];
+        $stores[] = ['criteria'=>4, 'question'=>17, 'answer'=>7, 'competencies'=>13];
+        $stores[] = ['criteria'=>4, 'question'=>17, 'answer'=>8, 'competencies'=>14];
 
-            ['criteria'=>4, 'question'=>18, 'answer'=>9, 'competencies'=>1],
-            ['criteria'=>4, 'question'=>18, 'answer'=>10, 'competencies'=>2],
-            ['criteria'=>4, 'question'=>18, 'answer'=>11, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>18, 'answer'=>12, 'competencies'=>4],
+        $stores[] = ['criteria'=>4, 'question'=>18, 'answer'=>9, 'competencies'=>11];
+        $stores[] = ['criteria'=>4, 'question'=>18, 'answer'=>10, 'competencies'=>12];
+        $stores[] = ['criteria'=>4, 'question'=>18, 'answer'=>11, 'competencies'=>13];
+        $stores[] = ['criteria'=>4, 'question'=>18, 'answer'=>12, 'competencies'=>14];
 
-            ['criteria'=>4, 'question'=>19, 'answer'=>13, 'competencies'=>1],
-            ['criteria'=>4, 'question'=>19, 'answer'=>14, 'competencies'=>2],
-            ['criteria'=>4, 'question'=>19, 'answer'=>15, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>19, 'answer'=>16, 'competencies'=>4],
+        $stores[] = ['criteria'=>4, 'question'=>19, 'answer'=>13, 'competencies'=>11];
+        $stores[] = ['criteria'=>4, 'question'=>19, 'answer'=>14, 'competencies'=>12];
+        $stores[] = ['criteria'=>4, 'question'=>19, 'answer'=>15, 'competencies'=>13];
+        $stores[] = ['criteria'=>4, 'question'=>19, 'answer'=>16, 'competencies'=>14];
 
-            ['criteria'=>4, 'question'=>20, 'answer'=>17, 'competencies'=>1],
-            ['criteria'=>4, 'question'=>20, 'answer'=>18, 'competencies'=>2],
-            ['criteria'=>4, 'question'=>20, 'answer'=>19, 'competencies'=>3],
-            ['criteria'=>4, 'question'=>20, 'answer'=>20, 'competencies'=>4],
-        ];
+        $stores[] = ['criteria'=>4, 'question'=>20, 'answer'=>17, 'competencies'=>11];
+        $stores[] = ['criteria'=>4, 'question'=>20, 'answer'=>18, 'competencies'=>12];
+        $stores[] = ['criteria'=>4, 'question'=>20, 'answer'=>19, 'competencies'=>13];
+        $stores[] = ['criteria'=>4, 'question'=>20, 'answer'=>20, 'competencies'=>14];
+
         foreach ($stores as $store) {
             Profilling::create($store);
         }

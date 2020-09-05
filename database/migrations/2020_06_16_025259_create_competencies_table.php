@@ -16,6 +16,7 @@ class CreateCompetenciesTable extends Migration
         Schema::create('prof_competencies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('competencies');
+            $table->text('description')->nullable();
             $table->string('status')->default('Y');
             $table->timestamps();
         });

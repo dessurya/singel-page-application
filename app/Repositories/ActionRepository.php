@@ -1287,60 +1287,211 @@ class ActionRepository implements ActionRepositoryInterface{
 			$view = view('_main.transaction.report', compact('Transaction'))->render();
 			$nameFile = Str::slug($Transaction->name,'_').Carbon::now()->format('Ymd');
 			$encodeImg = base64_encode(file_get_contents(url("images/Profilling_Logo.jpg")));
-			$pdfConfig = [
-				[
-					'image'=>'data:image/jpeg;base64,'.$encodeImg,
-					'fit'=> [250, 250]
-				],
-				[
-					'table' => [
-						'widths' => ['auto', '*'],
-						'body' => [
-							['Name', $Transaction->getUser->name],
-							['Email', $Transaction->getUser->email],
-							['Tgl Lahir', $Transaction->getUser->getUserDetils->date_of_birth],
-							['Perusahaan', $Transaction->getUser->getUserDetils->current_companies],
-							['Group/Jabatan', $Transaction->getUser->getUserDetils->work_title],
-							['Tgl Asessment', (new Carbon($Transaction->created_at))->format('d-M-Y')],
+			
+			$header1 = [ 'image'=>'data:image/jpeg;base64,'.$encodeImg, 'fit'=> [250, 250], 'alignment'=> 'center', 'margin' => [0, 20] ];
+			$header2 = [
+				'table' => [
+					'widths' => ['auto', '*', 'auto', '*'],
+					'body' => [
+						[
+							'Name', $Transaction->getUser->name, 
+							'Perusahaan', $Transaction->getUser->getUserDetils->current_companies
+						],
+						[
+							'Email', $Transaction->getUser->email,
+							'Group/Jabatan', $Transaction->getUser->getUserDetils->work_title
+						],
+						[
+							'Tgl Lahir', $Transaction->getUser->getUserDetils->date_of_birth,
+							'Tgl Asessment', (new Carbon($Transaction->created_at))->format('d-M-Y')
 						]
 					]
-				]
+				], 
+				'margin' => [0, 20]
 			];
+
+			$pdfConfig = [];
+			$pdfConfig[] = $header1;
+			$pdfConfig[] = $header2;
+			$result = [];
+			$result[] = [ ['alignment'=> 'center', 'text' => 'Criteria'], ['alignment'=> 'center', 'text' => 'Competencies']];
+			foreach ($Transaction->result as $idx => $data) { $result[] = [ $data->criteria->criteria, $data->criteria->highest_competencies ]; }
+			$pdfConfig[] = ['text' => 'Profilling Resault', 'style' => 'header', 'alignment'=> 'center',  'margin' => [0, 20]];
+			$pdfConfig[] = [
+				'table' => [
+					'widths' => ['*', '*'],
+					'body' => $result
+				],
+				'pageBreak' =>  'after'
+			];
+			
 			foreach ($Transaction->result as $idx => $data) {
 				$criteria = Criteria::find($data->criteria->id);
-				$pdfConfig[] = 'Criteria : '.$criteria->criteria.' your dominant competencies is '.$data->criteria->highest_competencies;
-				if ($criteria->description == 'criteria_description_1') {
-					$pdfConfig[] = [
+				$pdfConfig[] = ['text' => $criteria->criteria, 'style' => 'header', 'alignment'=> 'center',  'margin' => [0, 20]];
+				$pdfConfig[] = ['text' => $criteria->description,  'margin' => [0, 20]];
+				if ($criteria->flag == 1) {
+					$cmptcsDescr_0 = Competencies::find($data->resault[0]->competencies_id)->description;
+					$cmptcsDescr_1 = Competencies::find($data->resault[1]->competencies_id)->description;
+					$cmptcsDescr_2 = Competencies::find($data->resault[2]->competencies_id)->description;
+					$cmptcsDescr_3 = Competencies::find($data->resault[3]->competencies_id)->description;
+					$addPage = [
 						'table' => [
 							'widths' => ['*','*'],
 							'body' => [
 								[
-									['text'=>$data->resault[0]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'green'],
-									['text'=>$data->resault[1]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'red'],
+									[
+										'text'=>$data->resault[0]->competencies_name, 
+										'alignment'=> 'center', 
+										'border'=> [true, true, true, false], 
+										'fillColor'=> 'green'
+									],
+									[
+										'text'=>$data->resault[1]->competencies_name, 
+										'alignment'=> 'center', 
+										'border'=> [true, true, true, false], 
+										'fillColor'=> 'red'
+									],
 								],
 								[
-									['text'=>'Real :'.$data->resault[0]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'green'],
-									['text'=>'Real :'.$data->resault[1]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'red'],
+									[
+										'text'=>$data->resault[0]->revision_percen.'%', 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'green'
+									],
+									[
+										'text'=>$data->resault[1]->revision_percen.'%', 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'red'
+									],
 								],
 								[
-									['text'=>'Revision :'.$data->resault[0]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'green'],
-									['text'=>'Revision :'.$data->resault[1]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'red'],
+									[
+										'text'=>$data->resault[0]->competencies_name == $data->criteria->highest_competencies ? 'Dominan' : '-', 
+										'alignment'=> 'center', 
+										'fillColor'=> 'green'
+									],
+									[
+										'text'=>$data->resault[1]->competencies_name == $data->criteria->highest_competencies ? 'Dominan' : '-', 
+										'alignment'=> 'center', 
+										'fillColor'=> 'red'
+									],
 								],
 								[
-									['text'=>$data->resault[2]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'yellow'],
-									['text'=>$data->resault[3]->competencies_name, 'alignment'=> 'center', 'border'=> [true, true, true, false], 'fillColor'=> 'blue'],
+									[
+										'text'=>$cmptcsDescr_0, 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'green'
+									],
+									[
+										'text'=>$cmptcsDescr_1, 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'red'
+									],
 								],
 								[
-									['text'=>'Real :'.$data->resault[2]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'yellow'],
-									['text'=>'Real :'.$data->resault[3]->real_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, false], 'fillColor'=> 'blue'],
+									[
+										'text'=>$data->resault[2]->competencies_name, 
+										'alignment'=> 'center', 
+										'border'=> [true, true, true, false], 
+										'fillColor'=> 'yellow'
+									],
+									[
+										'text'=>$data->resault[3]->competencies_name, 
+										'alignment'=> 'center', 
+										'border'=> [true, true, true, false], 
+										'fillColor'=> 'blue'
+									],
 								],
 								[
-									['text'=>'Revision :'.$data->resault[2]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'yellow'],
-									['text'=>'Revision :'.$data->resault[3]->revision_percen.'%', 'alignment'=> 'center', 'border'=> [true, false, true, true], 'fillColor'=> 'blue'],
+									[
+										'text'=>$data->resault[2]->revision_percen.'%', 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'yellow'
+									],
+									[
+										'text'=>$data->resault[3]->revision_percen.'%', 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'blue'
+									],
+								],
+								[
+									[
+										'text'=>$data->resault[2]->competencies_name == $data->criteria->highest_competencies ? 'Dominan' : '-', 
+										'alignment'=> 'center', 
+										'fillColor'=> 'yellow'
+									],
+									[
+										'text'=>$data->resault[3]->competencies_name == $data->criteria->highest_competencies ? 'Dominan' : '-', 
+										'alignment'=> 'center', 
+										'fillColor'=> 'blue'
+									],
+								],
+								[
+									[
+										'text'=>$cmptcsDescr_2, 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'yellow'
+									],
+									[
+										'text'=>$cmptcsDescr_3, 
+										'alignment'=> 'center', 
+										'border'=> [true, false, true, true], 
+										'fillColor'=> 'blue'
+									],
 								]
 							]
 						]
 					];
+					$addPage['pageBreak'] = 'after';
+					$pdfConfig[] = $addPage;
+				}
+				if ($criteria->flag == 2){
+					$widths = [];
+					$row1 = [];
+					$row2 = [];
+					$row3 = [];
+					$row4 = [];
+					foreach ($data->resault as $idx => $resDt) {
+						$dominan = $resDt->competencies_name == $data->criteria->highest_competencies ? 'Dominan' : '-';
+						$color = $resDt->competencies_name == $data->criteria->highest_competencies ? 'red' : 'blue';
+						$cmptcDescr = Competencies::find($resDt->competencies_id)->description;
+						$widths[] = '*';
+						$row1[] = [
+							'text'=>$resDt->competencies_name, 
+							'alignment'=> 'center', 
+							'fillColor'=> $color
+						];
+						$row2[] = [
+							'text'=>$resDt->revision_percen.'%', 
+							'alignment'=> 'center', 
+							'fillColor'=> $color
+						];
+						$row3[] = [
+							'text'=>$dominan, 
+							'alignment'=> 'center', 
+							'fillColor'=> $color
+						];
+						$row4[] = [
+							'text'=>$cmptcDescr, 
+							'alignment'=> 'center', 
+							'fillColor'=> $color
+						];
+					}
+					$addPage = [
+						'table' => [
+							'widths' => $widths,
+							'body' => [$row1, $row2, $row3, $row4]
+						]
+					];
+					$addPage['pageBreak'] = 'after';
+					$pdfConfig[] = $addPage;
 				}
 			}
 			return [

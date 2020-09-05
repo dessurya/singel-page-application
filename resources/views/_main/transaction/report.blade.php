@@ -57,6 +57,8 @@
         </td>
         @endforeach
     </tr>
+    <?php
+    /*
     <tr>
         <td>Real</td>
         @foreach($Compentecies as $cptcs)
@@ -71,8 +73,11 @@
         </td>
         @endforeach
     </tr>
+    */
+    ?>
     <tr>
-        <td>Revision</td>
+        <?php // <td>Revision</td> ?>
+        <td></td>
         @foreach($Compentecies as $cptcs)
         @php 
             $collection = (new Illuminate\Support\Collection($toArr['resault']))->firstWhere('competencies_id', $cptcs->competencies);
