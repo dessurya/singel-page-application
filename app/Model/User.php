@@ -23,6 +23,10 @@ class User extends Authenticatable{
     }
 
     public function setPasswordAttribute($password){ 
-        return $this->attributes['password'] = Hash::make($password); 
+        if ($password == null) {
+            return null;
+        }else{
+            return $this->attributes['password'] = Hash::make($password); 
+        }
     }
 }

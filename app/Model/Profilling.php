@@ -16,11 +16,17 @@ class Profilling extends Model
 		return $this->hasOne('App\Model\Competencies', 'id', 'competencies');
 	}
 
-	public function getAnswerReport($profilling,$answer,$trans){
-		if (TransactionDetils::where(['profilling' => $profilling, 'answer' => $answer, 'transaction'=>$trans])->count() > 0) {
-			return 'X';
+	public function getAnswerReport($data){
+		if (TransactionDetils::where([
+			'profilling' => $data['profilling'], 
+			'answer' => $data['answer'], 
+			'question' => $data['question'], 
+			'criteria' => $data['criteria'], 
+			'transaction'=>$data['transaction']
+			])->count() > 0) {
+			return true;
 		}else{
-			return '';
+			return false;
 		}
 	}
 }

@@ -24,7 +24,7 @@
 </script>
 <script type="text/javascript" src="{{ asset('_js/action.js') }}"></script>
 <script type="text/javascript" src="{{ asset('_js/jquery.base64.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('_js/function.js') }}?v=0.1"></script>
+<script type="text/javascript" src="{{ asset('_js/function.js') }}?v=0.2"></script>
 
 <script type="text/javascript" src="{{ asset('_js/pdfmake.js') }}?v=0.1"></script>
 <script type="text/javascript" src="{{ asset('_js/vfs_fonts.js') }}?v=0.1"></script>

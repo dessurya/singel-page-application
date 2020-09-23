@@ -19,8 +19,9 @@ class SeederRoleTable extends Seeder
     	];
     	$store[] = [
     		'status' => 'Y',
-    		'name' => 'public',
-    		'access_menu' => '{"menu":[{"name":"Main Menu","tab":"mm","chld":[{"name":"Update Personal","accKey":"selfUpdate"},{"name":"View Profilling","accKey":"selfProfillingHistory"},{"name":"Take Profilling","accKey":"takeProfilling"}]}],"accKey":{"selfUpdate":{"view":true,"edit":true},"selfProfillingHistory":{"view":true},"takeProfilling":{"store":true}}}'
+            'name' => 'public',
+            'access_menu' => '{"menu":[{"name":"Main Menu","tab":"mm","chld":[{"name":"Update Personal","accKey":"selfUpdate"},{"name":"Take Profilling","accKey":"takeProfilling"}]}],"accKey":{"selfUpdate":{"view":true,"edit":true},"takeProfilling":{"store":true}}}'
+    		// 'access_menu' => '{"menu":[{"name":"Main Menu","tab":"mm","chld":[{"name":"Update Personal","accKey":"selfUpdate"},{"name":"View Profilling","accKey":"selfProfillingHistory"},{"name":"Take Profilling","accKey":"takeProfilling"}]}],"accKey":{"selfUpdate":{"view":true,"edit":true},"selfProfillingHistory":{"view":true},"takeProfilling":{"store":true}}}'
     	];
         foreach ($store as $row) {
             $store = new Role;

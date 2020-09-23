@@ -155,9 +155,7 @@ function generateExcel(data) {
 }
 
 function generatePDF(config) {
-    var docDefinition = {
-        content: config.render
-    };
+    var docDefinition = config.render;
     pdfMake.createPdf(docDefinition).download(config.name + '.pdf');
 }
 

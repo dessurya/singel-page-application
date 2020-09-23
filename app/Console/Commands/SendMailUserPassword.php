@@ -42,7 +42,7 @@ class SendMailUserPassword extends Command
      */
     public function handle()
     {
-        $users = User::where('send','Y')->whereNull('password')->whereNotNull('remember_token')->orderBy('updated_at', 'asc')->limit(5)->get();
+        $users = User::where('send','Y')->whereNotNull('remember_token')->orderBy('updated_at', 'asc')->limit(5)->get();
         foreach ($users as $user) {
             Mail::to($user->email)->send(new LoginLinkMail($user));
             $store = User::find($user->id);
