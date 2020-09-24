@@ -1352,6 +1352,7 @@ class ActionRepository implements ActionRepositoryInterface{
 		foreach ($Transaction->result as $key => $value) {
 			$data = [];
 			$data['criteria'] = $value->criteria->criteria;
+			$data['highest_competencies'] = $value->criteria->highest_competencies;
 			$data['qstn_n_asnwr'] = [];
 			$getQuestion = TransactionDetils::with('getQuestion')
 			->where([
@@ -1376,6 +1377,9 @@ class ActionRepository implements ActionRepositoryInterface{
 					$qna[] = $valueGA->getCompetencies->competencies;
 				}
 				$data['qstn_n_asnwr'][] = $qna;
+				$data['chunk'] = $value->resault;
+				$data['chunk'] = collect($data['chunk'])->chunk(count($getAnswer))->toArray();
+				$data['chunk'] = (array)$data['chunk'];
 				if (count($qna) > $qnaCount) { $qnaCount = count($qna); }
 			}
 			$data['count_qstn_n_asnwr'] = $qnaCount;
@@ -1540,7 +1544,7 @@ class ActionRepository implements ActionRepositoryInterface{
 					'alignment'=> 'center', 
 					'width' => 520
 				];
-				if ($idx != count($Transaction->result)) { $imgFlag1['pageBreak'] = 'after'; }
+				// if ($idx != count($Transaction->result)) { $imgFlag1['pageBreak'] = 'after'; }
 				$pdfConfig['content'][] = $imgFlag1;
 			}
 			if ($criteria->flag == 2){
@@ -1572,7 +1576,7 @@ class ActionRepository implements ActionRepositoryInterface{
 						'body' => [$row1, $row2]
 					]
 				];
-				if ($idx != count($Transaction->result)) { $addPage['pageBreak'] = 'after'; }
+				// if ($idx != count($Transaction->result)) { $addPage['pageBreak'] = 'after'; }
 				$pdfConfig['content'][] = $addPage;
 			}
 		}

@@ -23,8 +23,20 @@
         @endforeach
     </tr>
     @endforeach
-     
-	@endforeach 
+    
+    @foreach ($row['chunk'] as $idx => $value) 
+        <tr>
+        @if($idx == 0) <td></td> @endif
+        @foreach ($value as $variable) 
+            @php $variable = (array)$variable; @endphp
+            <td {{ $variable['competencies_name'] == $row['highest_competencies'] ? 'style=background:pink;' : 'style=background:paleturquoise;' }}>{{ $variable['revision_resault'] }}</td>
+            <td {{ $variable['competencies_name'] == $row['highest_competencies'] ? 'style=background:pink;' : 'style=background:paleturquoise;' }}>{{ $variable['competencies_name'] }}</td>
+        @endforeach
+        </tr>
+    @endforeach
+
+
+	@endforeach
 
     
 </table>
