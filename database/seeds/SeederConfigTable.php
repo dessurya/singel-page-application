@@ -62,7 +62,7 @@ class SeederConfigTable extends Seeder
     	];
     	$store[] = [
     		'accKey' => 'profillingAnswer',
-    		'config' => '{"table":{"config":[{"data":"answer","name":"answer","searchable":true,"orderable":true},{"data":"status","name":"status","searchable":true,"orderable":true}],"url":"VpAnswer","valOfField":"answer","sortBy":["answer","desc"]}}'
+    		'config' => '{"table":{"config":[{"data":"answer","name":"answer","searchable":true,"orderable":true},{"data":"ans_category","name":"ans_category","searchable":true,"orderable":true},{"data":"status","name":"status","searchable":true,"orderable":true}],"url":"VpAnswer","valOfField":"answer","sortBy":["answer","desc"]}}'
     	];
     	$store[] = [
     		'accKey' => 'profillingCompetencies',

@@ -17,6 +17,7 @@ class CreateVPAnswer extends Migration
                 SELECT 
                     id,
                     answer,
+                    ans_category,
                     status
                 FROM prof_answer
             )

@@ -144,26 +144,26 @@ class SeederSetBaseData extends Seeder
     public function Answer()
     {
         $stores = [
-            ['answer'=>'answer_1'],
-            ['answer'=>'answer_2'],
-            ['answer'=>'answer_3'],
-            ['answer'=>'answer_4'],
-            ['answer'=>'answer_5'],
-            ['answer'=>'answer_6'],
-            ['answer'=>'answer_7'],
-            ['answer'=>'answer_8'],
-            ['answer'=>'answer_9'],
-            ['answer'=>'answer_10'],
-            ['answer'=>'answer_11'],
-            ['answer'=>'answer_12'],
-            ['answer'=>'answer_13'],
-            ['answer'=>'answer_14'],
-            ['answer'=>'answer_15'],
-            ['answer'=>'answer_16'],
-            ['answer'=>'answer_17'],
-            ['answer'=>'answer_18'],
-            ['answer'=>'answer_19'],
-            ['answer'=>'answer_20']
+            ['ans_category'=>'ans_category_1','answer'=>'answer_1'],
+            ['ans_category'=>'ans_category_2','answer'=>'answer_2'],
+            ['ans_category'=>'ans_category_3','answer'=>'answer_3'],
+            ['ans_category'=>'ans_category_4','answer'=>'answer_4'],
+            ['ans_category'=>'ans_category_5','answer'=>'answer_5'],
+            ['ans_category'=>'ans_category_6','answer'=>'answer_6'],
+            ['ans_category'=>'ans_category_7','answer'=>'answer_7'],
+            ['ans_category'=>'ans_category_8','answer'=>'answer_8'],
+            ['ans_category'=>'ans_category_9','answer'=>'answer_9'],
+            ['ans_category'=>'ans_category_10','answer'=>'answer_10'],
+            ['ans_category'=>'ans_category_11','answer'=>'answer_11'],
+            ['ans_category'=>'ans_category_12','answer'=>'answer_12'],
+            ['ans_category'=>'ans_category_13','answer'=>'answer_13'],
+            ['ans_category'=>'ans_category_14','answer'=>'answer_14'],
+            ['ans_category'=>'ans_category_15','answer'=>'answer_15'],
+            ['ans_category'=>'ans_category_16','answer'=>'answer_16'],
+            ['ans_category'=>'ans_category_17','answer'=>'answer_17'],
+            ['ans_category'=>'ans_category_18','answer'=>'answer_18'],
+            ['ans_category'=>'ans_category_19','answer'=>'answer_19'],
+            ['ans_category'=>'ans_category_20','answer'=>'answer_20']
         ];
         foreach ($stores as $store) {
             Answer::create($store);

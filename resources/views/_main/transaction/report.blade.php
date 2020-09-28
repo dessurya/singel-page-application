@@ -30,7 +30,7 @@
         @foreach ($value as $variable) 
             @php $variable = (array)$variable; @endphp
             <td {{ $variable['competencies_name'] == $row['highest_competencies'] ? 'style=background:pink;' : 'style=background:paleturquoise;' }}>{{ $variable['revision_resault'] }}</td>
-            <td {{ $variable['competencies_name'] == $row['highest_competencies'] ? 'style=background:pink;' : 'style=background:paleturquoise;' }}>{{ $variable['competencies_name'] }}</td>
+            <td {{ $variable['competencies_name'] == $row['highest_competencies'] ? 'style=background:pink;' : 'style=background:paleturquoise;' }} colspan="2">{{ $variable['competencies_name'] }}</td>
         @endforeach
         </tr>
     @endforeach

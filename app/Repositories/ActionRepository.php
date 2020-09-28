@@ -937,6 +937,7 @@ class ActionRepository implements ActionRepositoryInterface{
 				$store = Answer::find($storeData['id']);
 			}
 			$store->answer = $storeData['answer'];
+			$store->ans_category = $storeData['ans_category'];
 			$store->save();
 			return [
 				"Success" => true,
@@ -1374,6 +1375,7 @@ class ActionRepository implements ActionRepositoryInterface{
 						'criteria' => $value->criteria->id,
 						'transaction'=>$Transaction->id,
 					]);
+					$qna[] = $valueGA->getAnswer->ans_category;
 					$qna[] = $valueGA->getCompetencies->competencies;
 				}
 				$data['qstn_n_asnwr'][] = $qna;
