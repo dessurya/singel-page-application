@@ -402,3 +402,8 @@ function questionHiddenCheck(elem) {
     });
     return count;
 }
+
+function startprofilling() {
+    $('.startProfilling').addClass('active')
+    $('#welcomeTextProfilling').remove()
+}

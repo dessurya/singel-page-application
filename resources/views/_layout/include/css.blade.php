@@ -86,4 +86,79 @@
             white-space: unset;
         }
     }
+
+    body{
+        background-color: #F7F7F7;
+    }
+    #content_render{
+        position:relative;
+        margin: 0 auto;
+        dispaly:block;
+        max-width: 1260px;
+    }
+    #heading{
+        position: relative; 
+        width: 100%; 
+        height: 120px; 
+        display: table;
+    }
+    #heading #wrap{
+        position: relative; 
+        display: table-row; 
+        width: 100%; 
+        height: 120px;
+    }
+    #heading #wrap .cell {
+        position: relative; 
+        display: table-cell;
+        height: 120px; 
+        vertical-align: middle; 
+        text-align: center;
+    }
+
+    #heading #wrap #logo.cell{
+        width: 10%;
+    }
+    #heading #wrap #welcome.cell{
+        width: 80%;
+    }
+    #heading #wrap #button.cell{
+        width: 10%;
+    }
+
+    #content_body{
+        position: relative; 
+        width: 90%; 
+        margin: 0 auto; 
+        background-color: white; 
+        padding: 0 15px 15px;
+    }
+
+    @media screen and (max-width: 462px){
+        #content_render{
+            max-width:440px;
+        }
+        #heading, #heading #wrap, #heading #wrap .cell{
+            display:block;
+            height: auto;
+        }
+        #heading #wrap #logo.cell,
+        #heading #wrap #welcome.cell,
+        #heading #wrap #button.cell{
+            width: 100%;
+            margin-bottom:1.2em;
+        }
+        
+
+        #content_body{
+            padding: 0 15px 5px;
+        }
+    }
+
+    .startProfilling{
+        display:none;
+    }
+    .startProfilling.active{
+        display:block;
+    }
 </style>

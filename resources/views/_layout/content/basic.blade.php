@@ -10,27 +10,29 @@
         <link rel="icon" type="image/png" href="{{ asset('images/Logo.jpg') }}" />
         @include('_layout.include.css')
 	</head>
-	<body style="background-color: #F7F7F7;">
-		<div style="position: relative; width: 100%; height: 120px; display: table;">
-			<div style="position: relative; display: table-row; width: 100%; height: 120px;">
-				<div style="position: relative; display: table-cell; width: 10%; height: 120px; vertical-align: middle; text-align: center;">
-					<img src="{{ asset('images/Profilling_Logo.jpg') }}" height="80px;">
-				</div>
-				<div style="position: relative; display: table-cell; width: 80%; height: 120px; vertical-align: middle; text-align: center;">
-					Welcome {{ Str::title(Auth::guard('user')->user()->name) }}<br>
-					paxic.com Thinking-behaviour Profilling
-				</div>
-				<div style="position: relative; display: table-cell; width: 10%; height: 120px; vertical-align: middle; text-align: center;">
-					<button id="change_password"  class="btn btn-success">Change Password</button>
-					<button id="logout" class="btn btn-success">Logout</button>
+	<body>
+		<div id="content_render">
+			<div id="heading">
+				<div id="wrap">
+					<div id="logo" class="cell">
+						<img src="{{ asset('images/Profilling_Logo.jpg') }}" height="80px;">
+					</div>
+					<div id="welcome" class="cell">
+						Hallo {{ Str::title(Auth::guard('user')->user()->name) }},<br>
+						Welcome to Thinking-Map Assessment by paxcis.com
+					</div>
+					<div id="button" class="cell">
+						<button id="change_password"  class="btn btn-success">Change Password</button>
+						<button id="logout" class="btn btn-success">Logout</button>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div style="position: relative; width: 90%; margin: 0 auto; background-color: white; padding: 0 15px 15px;">
-			<div id="menu"></div>
-			<hr>
-			<div id="form"></div>
-			<div id="contentAccess"></div>
+			<div id="content_body">
+				<div id="menu"></div>
+				<hr>
+				<div id="form"></div>
+				<div id="contentAccess"></div>
+			</div>
 		</div>
 
 		<div class="modal fade" id="modal-indexOfSearch">
